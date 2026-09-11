@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\SerializedItem;
 use App\Models\StockMovement;
 use App\Models\User;
+use App\Services\Payment\ScheduleGenerator;
 use App\Services\Pricing\PricingEngine;
 use Carbon\Carbon;
 use DomainException;
@@ -21,7 +22,8 @@ use Illuminate\Support\Str;
 class AgreementService
 {
     public function __construct(
-        protected PricingEngine $pricingEngine
+        protected PricingEngine $pricingEngine,
+        protected ScheduleGenerator $scheduleGenerator
     ) {}
 
     /**
@@ -262,6 +264,9 @@ class AgreementService
             $agreement->activated_at = now();
             $agreement->handover_notes = $handoverNotes;
             $agreement->save();
+
+            // Automatically generate chronological repayment schedule
+            $this->scheduleGenerator->generateSchedule($agreement);
 
             return $agreement;
         });

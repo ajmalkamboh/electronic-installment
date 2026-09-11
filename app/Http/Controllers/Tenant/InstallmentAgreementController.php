@@ -168,6 +168,8 @@ class InstallmentAgreementController extends Controller
             'creator',
             'approvedBy',
             'disbursedBy',
+            'schedules',
+            'payments.collector',
         ]);
 
         return view('tenant.agreements.show', compact('agreement'));

@@ -141,6 +141,13 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
     Route::post('/agreements/{agreement}/disburse', [\App\Http\Controllers\Tenant\InstallmentAgreementController::class, 'disburse'])->name('agreements.disburse');
     Route::post('/agreements/{agreement}/cancel', [\App\Http\Controllers\Tenant\InstallmentAgreementController::class, 'cancel'])->name('agreements.cancel');
     Route::get('/agreements/{agreement}/print', [\App\Http\Controllers\Tenant\InstallmentAgreementController::class, 'print'])->name('agreements.print');
+
+    // Payment Engine & Schedule Ledger (Phase 10)
+    Route::get('/payments', [\App\Http\Controllers\Tenant\PaymentController::class, 'index'])->name('payments.index');
+    Route::get('/payments/create', [\App\Http\Controllers\Tenant\PaymentController::class, 'create'])->name('payments.create');
+    Route::post('/payments', [\App\Http\Controllers\Tenant\PaymentController::class, 'store'])->name('payments.store');
+    Route::get('/payments/{payment}', [\App\Http\Controllers\Tenant\PaymentController::class, 'show'])->name('payments.show');
+    Route::get('/payments/{payment}/print', [\App\Http\Controllers\Tenant\PaymentController::class, 'print'])->name('payments.print');
 });
 
 

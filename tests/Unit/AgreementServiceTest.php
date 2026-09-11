@@ -157,7 +157,7 @@ class AgreementServiceTest extends TestCase
             'is_active' => true,
         ]);
 
-        $this->agreementService = new AgreementService(new PricingEngine());
+        $this->agreementService = new AgreementService(new PricingEngine(), new \App\Services\Payment\ScheduleGenerator());
     }
 
     public function test_creates_draft_agreement_with_calculated_financials_and_reserves_hardware(): void

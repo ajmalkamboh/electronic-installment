@@ -97,6 +97,14 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('payments.*') ? 'active' : '' }}" href="{{ route('payments.index') }}">
+          <i class="bi bi-cash-stack"></i>
+          <span>Payments & Receipts</span>
+          <span class="badge bg-success ms-auto small">Phase 10</span>
+        </a>
+      </li>
+
 
 
       <!-- Administration Section -->

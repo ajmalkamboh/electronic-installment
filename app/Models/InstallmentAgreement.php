@@ -159,6 +159,35 @@ class InstallmentAgreement extends Model
             ->withTimestamps();
     }
 
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(InstallmentSchedule::class)->orderBy('installment_number');
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class)->latest('payment_date');
+    }
+
+    public function nextDueSchedule(): ?InstallmentSchedule
+    {
+        return $this->schedules()
+            ->whereIn('status', ['due', 'partially_paid', 'pending'])
+            ->orderBy('installment_number')
+            ->first();
+    }
+
+    public function overdueSchedules(): HasMany
+    {
+        return $this->hasMany(InstallmentSchedule::class)
+            ->where('status', 'overdue')
+            ->orWhere(function ($q) {
+                $q->whereIn('status', ['due', 'partially_paid'])
+                    ->where('due_date', '<', now()->toDateString());
+            })
+            ->orderBy('installment_number');
+    }
+
     // Status helpers
     public function isDraft(): bool
     {

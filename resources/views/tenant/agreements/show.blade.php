@@ -49,6 +49,12 @@
         @endif
       @endif
 
+      @if(in_array($agreement->status, ['active', 'overdue', 'defaulted']))
+        <a href="{{ route('payments.create', ['agreement_id' => $agreement->id]) }}" class="btn btn-success">
+          <i class="bi bi-wallet2 me-1"></i>Collect Installment
+        </a>
+      @endif
+
       @if(!in_array($agreement->status, ['completed', 'cancelled']))
         <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
           <i class="bi bi-x-circle me-1"></i>Cancel
@@ -111,6 +117,135 @@
   <div class="row g-4">
     <!-- Left Column: Parties & Merchandise -->
     <div class="col-lg-7">
+      <!-- Repayment Schedule Card -->
+      @if($agreement->schedules->isNotEmpty())
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
+            <div>
+              <h5 class="fw-bold mb-0 text-dark">
+                <i class="bi bi-calendar-check text-primary me-2"></i>Repayment Schedule (Amortization Plan)
+              </h5>
+              <p class="text-muted small mb-0">Installment schedule, due dates, paid status and balance</p>
+            </div>
+            @if(in_array($agreement->status, ['active', 'overdue', 'defaulted']))
+              <a href="{{ route('payments.create', ['agreement_id' => $agreement->id]) }}" class="btn btn-sm btn-success">
+                <i class="bi bi-wallet2 me-1"></i>Collect Installment
+              </a>
+            @endif
+          </div>
+          <div class="card-body p-0 mt-3">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-uppercase small text-muted">
+                  <tr>
+                    <th class="ps-4">Inst #</th>
+                    <th>Due Date</th>
+                    <th>Principal</th>
+                    <th>Markup</th>
+                    <th>Total Due</th>
+                    <th>Paid</th>
+                    <th>Remaining</th>
+                    <th>Status</th>
+                    <th class="pe-4 text-end">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach($agreement->schedules as $sched)
+                    <tr class="{{ $sched->isOverdue() ? 'table-danger-subtle' : '' }}">
+                      <td class="ps-4 fw-bold font-monospace">#{{ $sched->installment_number }}</td>
+                      <td>
+                        <div class="fw-semibold text-dark">{{ $sched->due_date->format('d M, Y') }}</div>
+                        @if($sched->isOverdue())
+                          <span class="badge bg-danger small">Overdue</span>
+                        @endif
+                      </td>
+                      <td class="small">Rs. {{ number_format($sched->principal_amount) }}</td>
+                      <td class="small text-muted">Rs. {{ number_format($sched->markup_amount) }}</td>
+                      <td class="fw-bold text-dark">Rs. {{ number_format($sched->total_amount) }}</td>
+                      <td class="text-success fw-semibold small">Rs. {{ number_format($sched->paid_amount) }}</td>
+                      <td class="fw-bold {{ $sched->remaining_balance > 0 ? 'text-primary' : 'text-muted' }}">
+                        Rs. {{ number_format($sched->remaining_balance) }}
+                      </td>
+                      <td>{!! $sched->status_badge !!}</td>
+                      <td class="pe-4 text-end">
+                        @if(!$sched->isPaid() && in_array($agreement->status, ['active', 'overdue', 'defaulted']))
+                          <a href="{{ route('payments.create', ['agreement_id' => $agreement->id, 'amount' => $sched->remaining_balance]) }}"
+                             class="btn btn-sm btn-outline-primary"
+                             title="Record payment for this installment">
+                            <i class="bi bi-cash me-1"></i>Pay
+                          </a>
+                        @elseif($sched->isPaid())
+                          <span class="text-success small"><i class="bi bi-check2-circle me-1"></i>Settled</span>
+                        @endif
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      @endif
+
+      <!-- Payment Receipts & Transaction Ledger -->
+      @if($agreement->payments->isNotEmpty())
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+            <h5 class="fw-bold mb-0 text-dark">
+              <i class="bi bi-receipt text-primary me-2"></i>Payment Receipts & Ledger
+            </h5>
+            <p class="text-muted small mb-0">Cashier collections & waterfall allocations recorded for this account</p>
+          </div>
+          <div class="card-body p-0 mt-3">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-uppercase small text-muted">
+                  <tr>
+                    <th class="ps-4">Receipt #</th>
+                    <th>Date</th>
+                    <th>Method</th>
+                    <th>Amount</th>
+                    <th>Cashier</th>
+                    <th>Status</th>
+                    <th class="pe-4 text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach($agreement->payments as $p)
+                    <tr>
+                      <td class="ps-4 fw-bold font-monospace">
+                        <a href="{{ route('payments.show', $p->id) }}" class="text-primary text-decoration-none">
+                          {{ $p->payment_number }}
+                        </a>
+                      </td>
+                      <td>
+                        <div class="text-dark">{{ $p->payment_date->format('d M, Y') }}</div>
+                        <small class="text-muted">{{ $p->payment_date->format('h:i A') }}</small>
+                      </td>
+                      <td>{!! $p->method_badge !!}</td>
+                      <td class="fw-bold text-success fs-6">Rs. {{ number_format($p->amount) }}</td>
+                      <td>
+                        <div class="small fw-semibold text-dark">{{ $p->cashier?->name ?? 'Cashier' }}</div>
+                        <span class="text-muted small font-monospace">{{ $p->reference_number ?? '-' }}</span>
+                      </td>
+                      <td>{!! $p->status_badge !!}</td>
+                      <td class="pe-4 text-end">
+                        <a href="{{ route('payments.show', $p->id) }}" class="btn btn-sm btn-outline-primary me-1" title="View Dossier">
+                          <i class="bi bi-eye"></i>
+                        </a>
+                        <a href="{{ route('payments.print', $p->id) }}" target="_blank" class="btn btn-sm btn-outline-secondary" title="Print Receipt">
+                          <i class="bi bi-printer"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      @endif
+
       <!-- Customer Information -->
       <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
@@ -332,6 +467,31 @@
               </small>
             @endif
           </div>
+
+          <!-- Agreement Repayment Progress (when active/completed) -->
+          @if(in_array($agreement->status, ['active', 'overdue', 'defaulted', 'completed']))
+            <div class="border rounded p-3 mb-3 bg-light">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="small fw-bold text-dark">Remaining Financed Balance</span>
+                <span class="small fw-bold text-primary">
+                  Rs. {{ number_format($agreement->remaining_balance) }} / Rs. {{ number_format($agreement->total_financed) }}
+                </span>
+              </div>
+              @php
+                $repaidAmount = max(0, $agreement->total_financed - $agreement->remaining_balance);
+                $repaidPct = $agreement->total_financed > 0
+                  ? min(100, round(($repaidAmount / $agreement->total_financed) * 100))
+                  : 0;
+              @endphp
+              <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: {{ $repaidPct }}%;"></div>
+              </div>
+              <div class="d-flex justify-content-between text-muted small mt-1">
+                <span>{{ $repaidPct }}% Recovered</span>
+                <span>{{ $agreement->paid_installments }} / {{ $agreement->total_installments }} Installments</span>
+              </div>
+            </div>
+          @endif
 
           <!-- Schedule Milestones -->
           <div class="border-top pt-3">
