@@ -56,4 +56,21 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
     Route::get('/roles/{role}/edit', [\App\Http\Controllers\Tenant\RoleController::class, 'edit'])->name('roles.edit');
     Route::put('/roles/{role}', [\App\Http\Controllers\Tenant\RoleController::class, 'update'])->name('roles.update');
     Route::delete('/roles/{role}', [\App\Http\Controllers\Tenant\RoleController::class, 'destroy'])->name('roles.destroy');
+
+    // Customer & Debtor Management
+    Route::get('/customers', [\App\Http\Controllers\Tenant\CustomerController::class, 'index'])->name('customers.index');
+    Route::get('/customers/create', [\App\Http\Controllers\Tenant\CustomerController::class, 'create'])->name('customers.create');
+    Route::post('/customers', [\App\Http\Controllers\Tenant\CustomerController::class, 'store'])->name('customers.store');
+    Route::get('/customers/{customer}', [\App\Http\Controllers\Tenant\CustomerController::class, 'show'])->name('customers.show');
+    Route::get('/customers/{customer}/edit', [\App\Http\Controllers\Tenant\CustomerController::class, 'edit'])->name('customers.edit');
+    Route::put('/customers/{customer}', [\App\Http\Controllers\Tenant\CustomerController::class, 'update'])->name('customers.update');
+    Route::post('/customers/{customer}/toggle-status', [\App\Http\Controllers\Tenant\CustomerController::class, 'toggleStatus'])->name('customers.toggle-status');
+
+    // Guarantors
+    Route::post('/customers/{customer}/guarantors', [\App\Http\Controllers\Tenant\GuarantorController::class, 'store'])->name('customers.guarantors.store');
+    Route::post('/guarantors/{guarantor}/toggle-verified', [\App\Http\Controllers\Tenant\GuarantorController::class, 'toggleVerified'])->name('guarantors.toggle-verified');
+    Route::delete('/guarantors/{guarantor}', [\App\Http\Controllers\Tenant\GuarantorController::class, 'destroy'])->name('guarantors.destroy');
+
+    // Field Verifications
+    Route::post('/customers/{customer}/verifications', [\App\Http\Controllers\Tenant\CustomerVerificationController::class, 'store'])->name('customers.verifications.store');
 });

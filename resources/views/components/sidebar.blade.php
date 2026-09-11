@@ -31,10 +31,10 @@
       <li class="nav-heading"><span>Business Operations</span></li>
 
       <li class="nav-item">
-        <a class="nav-link text-muted" href="#" onclick="alert('Phase 02: Customer Registration & Credit Engine will be implemented in the next phase.')">
+        <a class="nav-link {{ request()->routeIs('customers.*') ? 'active' : '' }}" href="{{ route('customers.index') }}">
           <i class="bi bi-people"></i>
           <span>Customers & Guarantors</span>
-          <span class="badge bg-secondary ms-auto small">Phase 02</span>
+          <span class="badge bg-success ms-auto small">Phase 05</span>
         </a>
       </li>
 
