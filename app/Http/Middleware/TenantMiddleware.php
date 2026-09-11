@@ -25,6 +25,8 @@ class TenantMiddleware
             return redirect()->route('login');
         }
 
+        $user->refresh();
+
         // Security check: Verify user status
         if ($user->status !== 'active') {
             Auth::logout();

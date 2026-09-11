@@ -97,5 +97,8 @@ class DatabaseSeeder extends Seeder
             'status' => 'suspended',
             'phone' => '+92 302 9998877',
         ]);
+
+        // 7. Roles & Permissions & Link Staff
+        $this->call(RoleAndPermissionSeeder::class);
     }
 }

@@ -39,4 +39,21 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
     // Company Profile & Tenant Settings
     Route::get('/company/settings', [CompanySettingsController::class, 'edit'])->name('company.settings.edit');
     Route::put('/company/settings', [CompanySettingsController::class, 'update'])->name('company.settings.update');
+
+    // Employee & Staff Lifecycle Management
+    Route::get('/staff', [\App\Http\Controllers\Tenant\StaffController::class, 'index'])->name('staff.index');
+    Route::get('/staff/create', [\App\Http\Controllers\Tenant\StaffController::class, 'create'])->name('staff.create');
+    Route::post('/staff', [\App\Http\Controllers\Tenant\StaffController::class, 'store'])->name('staff.store');
+    Route::get('/staff/{staff}/edit', [\App\Http\Controllers\Tenant\StaffController::class, 'edit'])->name('staff.edit');
+    Route::put('/staff/{staff}', [\App\Http\Controllers\Tenant\StaffController::class, 'update'])->name('staff.update');
+    Route::post('/staff/{staff}/toggle-status', [\App\Http\Controllers\Tenant\StaffController::class, 'toggleStatus'])->name('staff.toggle-status');
+    Route::post('/staff/{staff}/reset-password', [\App\Http\Controllers\Tenant\StaffController::class, 'resetPassword'])->name('staff.reset-password');
+
+    // Role & Permissions (RBAC) Management
+    Route::get('/roles', [\App\Http\Controllers\Tenant\RoleController::class, 'index'])->name('roles.index');
+    Route::get('/roles/create', [\App\Http\Controllers\Tenant\RoleController::class, 'create'])->name('roles.create');
+    Route::post('/roles', [\App\Http\Controllers\Tenant\RoleController::class, 'store'])->name('roles.store');
+    Route::get('/roles/{role}/edit', [\App\Http\Controllers\Tenant\RoleController::class, 'edit'])->name('roles.edit');
+    Route::put('/roles/{role}', [\App\Http\Controllers\Tenant\RoleController::class, 'update'])->name('roles.update');
+    Route::delete('/roles/{role}', [\App\Http\Controllers\Tenant\RoleController::class, 'destroy'])->name('roles.destroy');
 });

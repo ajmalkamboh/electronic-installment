@@ -82,10 +82,18 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link text-muted" href="#" onclick="alert('Phase 04: Users, Roles, Permissions & Employee Structure will be implemented in Phase 04.')">
+        <a class="nav-link {{ request()->routeIs('staff.*') ? 'active' : '' }}" href="{{ route('staff.index') }}">
+          <i class="bi bi-people"></i>
+          <span>Staff Directory</span>
+          <span class="badge bg-success ms-auto small">Phase 04</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}" href="{{ route('roles.index') }}">
           <i class="bi bi-shield-check"></i>
-          <span>Security & Roles</span>
-          <span class="badge bg-secondary ms-auto small">Phase 04</span>
+          <span>Roles & Permissions</span>
+          <span class="badge bg-success ms-auto small">Phase 04</span>
         </a>
       </li>
 
