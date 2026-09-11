@@ -1,0 +1,274 @@
+.page-pricing {
+  .pricing-kicker {
+    display: block;
+    color: var(--accent-color);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .pricing-hero,
+  .pricing-card,
+  .pricing-panel,
+  .pricing-cta {
+    background: var(--surface-color);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--card-shadow);
+  }
+
+  .pricing-hero {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    background:
+      radial-gradient(circle at 88% 14%, color-mix(in srgb, var(--warning-color), transparent 84%), transparent 28%),
+      linear-gradient(135deg, color-mix(in srgb, var(--accent-color), transparent 92%), transparent 45%),
+      var(--surface-color);
+  }
+
+  .pricing-hero h1 {
+    margin: var(--spacing-xs) 0 var(--spacing-sm);
+    font-size: 2.4rem;
+  }
+
+  .pricing-hero p {
+    max-width: 640px;
+    margin: 0;
+    color: var(--muted-color);
+  }
+
+  .billing-toggle {
+    display: inline-flex;
+    gap: 4px;
+    padding: 4px;
+    background: var(--background-color);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--radius-full);
+  }
+
+  .billing-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    min-height: 36px;
+    padding: 0 var(--spacing-md);
+    color: var(--muted-color);
+    border-radius: var(--radius-full);
+    font-weight: 800;
+  }
+
+  .billing-toggle-btn.active,
+  .billing-toggle-btn:hover {
+    color: var(--contrast-color);
+    background: var(--accent-color);
+  }
+
+  .billing-toggle-btn span {
+    font-size: 0.72rem;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .pricing-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-xl);
+  }
+
+  .pricing-card.featured {
+    border-color: color-mix(in srgb, var(--accent-color), transparent 45%);
+    box-shadow: 0 24px 60px color-mix(in srgb, var(--accent-color), transparent 84%);
+  }
+
+  .pricing-badge {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    padding: 0.28rem 0.65rem;
+    color: var(--accent-color);
+    background: color-mix(in srgb, var(--accent-color), transparent 90%);
+    border-radius: var(--radius-pill);
+    font-size: 0.72rem;
+    font-weight: 900;
+  }
+
+  .pricing-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: var(--spacing-md);
+    border-radius: var(--radius-lg);
+  }
+
+  .pricing-icon.primary {
+    color: var(--accent-color);
+    background: color-mix(in srgb, var(--accent-color), transparent 90%);
+  }
+
+  .pricing-icon.warning {
+    color: var(--warning-color);
+    background: var(--warning-color-light);
+  }
+
+  .pricing-icon.neutral {
+    color: var(--muted-color);
+    background: var(--background-color);
+  }
+
+  .pricing-card h2 {
+    margin: 0 0 var(--spacing-xs);
+    font-size: 1.35rem;
+  }
+
+  .pricing-card p {
+    margin: 0;
+    color: var(--muted-color);
+  }
+
+  .pricing-price {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+  }
+
+  .pricing-price span {
+    color: var(--heading-color);
+    font-size: 1.25rem;
+    font-weight: 800;
+  }
+
+  .pricing-price strong {
+    color: var(--heading-color);
+    font-size: 3rem;
+    line-height: 0.9;
+  }
+
+  .pricing-price small {
+    color: var(--muted-color);
+    font-weight: 700;
+  }
+
+  .pricing-features {
+    display: grid;
+    gap: var(--spacing-sm);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .pricing-features li {
+    display: flex;
+    gap: var(--spacing-sm);
+    color: var(--default-color);
+    font-weight: 700;
+  }
+
+  .pricing-features i {
+    color: var(--success-color);
+  }
+
+  .pricing-card .btn {
+    margin-top: auto;
+  }
+
+  .pricing-panel {
+    overflow: hidden;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .pricing-panel-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color-light);
+  }
+
+  .pricing-panel-header h2 {
+    margin: 3px 0 0;
+    font-size: 1.1rem;
+  }
+
+  .pricing-compare-wrap {
+    overflow-x: auto;
+  }
+
+  .pricing-compare {
+    width: 100%;
+    min-width: 680px;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .pricing-compare th,
+  .pricing-compare td {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color-light);
+    text-align: center;
+  }
+
+  .pricing-compare th:first-child,
+  .pricing-compare td:first-child {
+    text-align: left;
+  }
+
+  .pricing-compare th {
+    color: var(--muted-color);
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    background: color-mix(in srgb, var(--background-color), var(--surface-color) 55%);
+  }
+
+  .pricing-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-xl);
+    color: var(--contrast-color);
+    background:
+      radial-gradient(circle at 88% 20%, rgb(255 255 255 / 0.18), transparent 30%),
+      linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--info-color), black 16%));
+  }
+
+  .pricing-cta .pricing-kicker,
+  .pricing-cta h2 {
+    color: var(--contrast-color);
+  }
+
+  .pricing-cta p {
+    margin: var(--spacing-sm) 0 0;
+    color: color-mix(in srgb, var(--contrast-color), transparent 18%);
+  }
+}
+
+@media (max-width: 1199px) {
+  .page-pricing {
+    .pricing-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .page-pricing {
+    .pricing-hero,
+    .pricing-cta {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+}

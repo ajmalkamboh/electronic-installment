@@ -1,0 +1,146 @@
+.page-settings {
+  .settings-kicker {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-color);
+  }
+
+  .settings-hero,
+  .settings-panel {
+    background: var(--surface-color);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--card-shadow);
+  }
+
+  .settings-hero {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--accent-color), transparent 90%), transparent 44%),
+      var(--surface-color);
+  }
+
+  .settings-hero h1 {
+    margin: var(--spacing-xs) 0;
+    font-size: 2.4rem;
+  }
+
+  .settings-hero p {
+    max-width: 650px;
+    margin: 0;
+    color: var(--muted-color);
+  }
+
+  .settings-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: var(--spacing-xl);
+  }
+
+  .settings-main,
+  .settings-side {
+    display: grid;
+    align-content: start;
+    gap: var(--spacing-lg);
+  }
+
+  .settings-panel-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color-light);
+  }
+
+  .settings-panel-header h2 {
+    margin: 3px 0 0;
+    font-size: 1.1rem;
+  }
+
+  .settings-form,
+  .settings-switch-list,
+  .settings-option-list,
+  .settings-danger-body {
+    padding: var(--spacing-lg);
+  }
+
+  .settings-switch-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) 0;
+    border-bottom: 1px solid var(--border-color-light);
+  }
+
+  .settings-switch-item:last-child {
+    border-bottom: 0;
+  }
+
+  .settings-switch-item strong,
+  .settings-switch-item span {
+    display: block;
+  }
+
+  .settings-switch-item strong {
+    color: var(--heading-color);
+  }
+
+  .settings-switch-item span,
+  .settings-danger-body p {
+    color: var(--muted-color);
+    font-size: 0.875rem;
+  }
+
+  .settings-option-list {
+    display: grid;
+    gap: var(--spacing-sm);
+  }
+
+  .settings-option-list label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--background-color), var(--surface-color) 52%);
+  }
+
+  .settings-option-list span {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-weight: 800;
+  }
+
+  .settings-danger {
+    border-color: color-mix(in srgb, var(--danger-color), transparent 55%);
+  }
+
+  .settings-danger .settings-kicker,
+  .settings-danger h2 {
+    color: var(--danger-color);
+  }
+}
+
+@media (max-width: 991px) {
+  .page-settings {
+    .settings-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .page-settings {
+    .settings-hero {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+}

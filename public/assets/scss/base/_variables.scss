@@ -1,0 +1,274 @@
+/*--------------------------------------------------------------
+# CSS Custom Properties - Color System
+# Single accent color theming with comprehensive palette
+--------------------------------------------------------------*/
+
+/* Fonts */
+:root {
+  --default-font: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --heading-font: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --nav-font: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono-font: "Geist Mono", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+}
+
+/* Spacing Scale */
+:root {
+  --spacing-xs: 0.3125rem;
+  --spacing-sm: 0.625rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.375rem;
+  --spacing-xl: 2.125rem;
+  --spacing-2xl: 3.25rem;
+}
+
+/* Border Radius */
+:root {
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 0.875rem;
+  --radius-full: 9999px;
+}
+
+/* Shadows */
+:root {
+  --shadow-sm: 0 1px 2px 0 rgb(22 34 51 / 0.06), 0 1px 1px -1px rgb(22 34 51 / 0.08);
+  --shadow-md: 0 12px 28px -18px rgb(22 34 51 / 0.35), 0 2px 8px -4px rgb(22 34 51 / 0.12);
+  --shadow-lg: 0 22px 45px -24px rgb(22 34 51 / 0.42), 0 8px 18px -12px rgb(22 34 51 / 0.18);
+  --shadow-xl: 0 32px 70px -30px rgb(22 34 51 / 0.52), 0 16px 32px -20px rgb(22 34 51 / 0.25);
+}
+
+/* Transitions */
+:root {
+  --transition-fast: 140ms ease;
+  --transition-base: 220ms ease;
+  --transition-slow: 360ms ease;
+}
+
+/* Layout Dimensions */
+:root {
+  --header-height: 68px;
+  --sidebar-width: 292px;
+  --sidebar-collapsed-width: 76px;
+  --footer-height: 60px;
+}
+
+/*--------------------------------------------------------------
+# Global Colors - Light Mode
+--------------------------------------------------------------*/
+:root {
+  /* Core palette */
+  --background-color: #f4f7fb;
+  --default-color: #273447;
+  --heading-color: #111827;
+  --accent-color: #315cf6;
+  --surface-color: #ffffff;
+  --contrast-color: #ffffff;
+
+  /* Extended text colors */
+  --muted-color: #687789;
+  --light-color: #9aa8b8;
+
+  /* Borders */
+  --border-color: #dbe4ef;
+  --border-color-light: #eaf0f7;
+  --border-color-dark: #c6d2df;
+
+  /* Status colors */
+  --success-color: #0f9b7a;
+  --success-color-light: #dff8f0;
+  --warning-color: #c87914;
+  --warning-color-light: #fff0d7;
+  --danger-color: #e05264;
+  --danger-color-light: #fde5ea;
+  --info-color: #0c9dc8;
+  --info-color-light: #ddf4fb;
+
+  /* Navigation colors */
+  --nav-color: var(--default-color);
+  --nav-hover-color: var(--accent-color);
+  --nav-mobile-background-color: var(--surface-color);
+  --nav-dropdown-background-color: var(--surface-color);
+  --nav-dropdown-color: var(--default-color);
+  --nav-dropdown-hover-color: var(--accent-color);
+
+  /* Header */
+  --header-bg: #ffffff;
+  --header-shadow: 0 10px 35px -28px rgb(22 34 51 / 0.45);
+  --header-border: var(--border-color);
+
+  /* Sidebar */
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #d9e2ec;
+  --sidebar-color: #324152;
+  --sidebar-muted-color: #8190a2;
+  --sidebar-text: var(--sidebar-color);
+  --sidebar-text-muted: var(--sidebar-muted-color);
+  --sidebar-hover-bg: #edf3ff;
+  --sidebar-active-bg: #315cf6;
+  --sidebar-active-color: var(--contrast-color);
+  --sidebar-active-text: var(--sidebar-active-color);
+
+  /* Cards */
+  --card-bg: #ffffff;
+  --card-shadow: var(--shadow-md);
+  --card-border: #e2e9f2;
+
+  /* Tables */
+  --table-header-bg: #f7f9fc;
+  --table-hover-bg: #eef4ff;
+  --table-stripe-bg: #fbfdff;
+
+  /* Forms */
+  --input-bg: #ffffff;
+  --input-border: var(--border-color);
+  --input-focus-border: var(--accent-color);
+  --input-focus-ring: rgb(49 92 246 / 0.2);
+}
+
+/*--------------------------------------------------------------
+# Dark Mode Palette
+--------------------------------------------------------------*/
+[data-theme="dark"] {
+  /* Core palette */
+  --background-color: #0e1524;
+  --default-color: #d8e0e7;
+  --heading-color: #f3f6f9;
+  --accent-color: #6d88ff;
+  --surface-color: #182235;
+  --contrast-color: #ffffff;
+
+  /* Extended text colors */
+  --muted-color: #9aa8b9;
+  --light-color: #728196;
+
+  /* Borders */
+  --border-color: #2b3a50;
+  --border-color-light: #202b3d;
+  --border-color-dark: #43536a;
+
+  /* Status colors (adjusted for dark mode) */
+  --success-color: #34d399;
+  --success-color-light: rgb(52 211 153 / 0.14);
+  --warning-color: #f4b95b;
+  --warning-color-light: rgb(244 185 91 / 0.15);
+  --danger-color: #fb7185;
+  --danger-color-light: rgb(251 113 133 / 0.15);
+  --info-color: #22d3ee;
+  --info-color-light: rgb(34 211 238 / 0.14);
+
+  /* Navigation colors */
+  --nav-color: var(--default-color);
+  --nav-hover-color: var(--accent-color);
+  --nav-mobile-background-color: var(--surface-color);
+  --nav-dropdown-background-color: var(--surface-color);
+  --nav-dropdown-color: var(--default-color);
+  --nav-dropdown-hover-color: var(--accent-color);
+
+  /* Header */
+  --header-bg: #141d2d;
+  --header-shadow: 0 18px 45px -26px rgb(0 0 0 / 0.75);
+  --header-border: var(--border-color);
+
+  /* Sidebar */
+  --sidebar-bg: #0d1119;
+  --sidebar-border: var(--border-color);
+  --sidebar-color: var(--default-color);
+  --sidebar-muted-color: var(--muted-color);
+  --sidebar-text: var(--sidebar-color);
+  --sidebar-text-muted: var(--sidebar-muted-color);
+  --sidebar-hover-bg: #1c2940;
+  --sidebar-active-bg: var(--accent-color);
+  --sidebar-active-color: var(--contrast-color);
+  --sidebar-active-text: var(--sidebar-active-color);
+
+  /* Cards */
+  --card-bg: #182235;
+  --card-shadow: 0 18px 45px -30px rgb(0 0 0 / 0.85);
+  --card-border: var(--border-color);
+
+  /* Tables */
+  --table-header-bg: #151b26;
+  --table-hover-bg: #202a3a;
+  --table-stripe-bg: #181f2c;
+
+  /* Forms */
+  --input-bg: #151b26;
+  --input-border: var(--border-color);
+  --input-focus-border: var(--accent-color);
+  --input-focus-ring: rgb(95 140 255 / 0.24);
+
+  /* Bootstrap overrides */
+  --bs-body-color: var(--default-color);
+  --bs-body-bg: var(--background-color);
+}
+
+/*--------------------------------------------------------------
+# Color Utility Classes
+# Override Bootstrap's color utilities with CSS custom properties
+# for proper dark mode support
+--------------------------------------------------------------*/
+
+/* Text Colors */
+.text-primary { color: var(--accent-color) !important; }
+.text-secondary { color: var(--muted-color) !important; }
+.text-success { color: var(--success-color) !important; }
+.text-warning { color: var(--warning-color) !important; }
+.text-danger { color: var(--danger-color) !important; }
+.text-info { color: var(--info-color) !important; }
+.text-muted { color: var(--muted-color) !important; }
+.text-body { color: var(--default-color) !important; }
+
+/* Background Colors */
+.bg-primary { background-color: var(--accent-color) !important; }
+.bg-success { background-color: var(--success-color) !important; }
+.bg-warning { background-color: var(--warning-color) !important; }
+.bg-danger { background-color: var(--danger-color) !important; }
+.bg-info { background-color: var(--info-color) !important; }
+.bg-light { background-color: var(--background-color) !important; }
+.bg-body { background-color: var(--background-color) !important; }
+.bg-surface { background-color: var(--surface-color) !important; }
+
+/* Soft/Light Background Colors */
+.bg-primary-light { background-color: color-mix(in srgb, var(--accent-color), transparent 90%) !important; }
+.bg-success-light { background-color: var(--success-color-light) !important; }
+.bg-warning-light { background-color: var(--warning-color-light) !important; }
+.bg-danger-light { background-color: var(--danger-color-light) !important; }
+.bg-info-light { background-color: var(--info-color-light) !important; }
+
+/* Border Colors */
+.border-primary { border-color: var(--accent-color) !important; }
+.border-success { border-color: var(--success-color) !important; }
+.border-warning { border-color: var(--warning-color) !important; }
+.border-danger { border-color: var(--danger-color) !important; }
+.border-info { border-color: var(--info-color) !important; }
+
+/* Gradient Backgrounds */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), black 15%)) !important;
+}
+
+.bg-gradient-success {
+  background: linear-gradient(135deg, var(--success-color), color-mix(in srgb, var(--success-color), black 14%)) !important;
+}
+
+.bg-gradient-warning {
+  background: linear-gradient(135deg, var(--warning-color), color-mix(in srgb, var(--warning-color), black 14%)) !important;
+}
+
+.bg-gradient-danger {
+  background: linear-gradient(135deg, var(--danger-color), color-mix(in srgb, var(--danger-color), black 14%)) !important;
+}
+
+.bg-gradient-info {
+  background: linear-gradient(135deg, var(--info-color), color-mix(in srgb, var(--info-color), black 14%)) !important;
+}
+
+/* Icon Colors */
+.icon-primary { color: var(--accent-color); }
+.icon-success { color: var(--success-color); }
+.icon-warning { color: var(--warning-color); }
+.icon-danger { color: var(--danger-color); }
+.icon-info { color: var(--info-color); }
+.icon-muted { color: var(--muted-color); }

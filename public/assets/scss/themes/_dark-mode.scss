@@ -1,0 +1,141 @@
+/*--------------------------------------------------------------
+# Dark Mode Specific Styles
+--------------------------------------------------------------*/
+
+/* Dark mode is primarily handled through CSS custom properties in _variables.scss
+   This file contains any additional dark mode specific overrides */
+
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* Images in dark mode - slight reduction in brightness */
+[data-theme="dark"] img:not([src*=".svg"]) {
+  filter: brightness(0.95);
+}
+
+[data-theme="dark"] .sidebar-logo img,
+[data-theme="dark"] .header-logo img,
+[data-theme="dark"] .footer-brand-mark img,
+[data-theme="dark"] .auth-logo img {
+  filter: brightness(1.32) saturate(1.18) drop-shadow(0 8px 18px rgb(0 0 0 / 0.32));
+}
+
+/* Code blocks */
+[data-theme="dark"] code {
+  background-color: color-mix(in srgb, var(--surface-color), var(--contrast-color) 8%);
+}
+
+[data-theme="dark"] pre {
+  background-color: var(--surface-color);
+  border-color: var(--border-color);
+}
+
+/* Form elements - ensure proper styling */
+[data-theme="dark"] input:-webkit-autofill,
+[data-theme="dark"] input:-webkit-autofill:hover,
+[data-theme="dark"] input:-webkit-autofill:focus,
+[data-theme="dark"] textarea:-webkit-autofill,
+[data-theme="dark"] textarea:-webkit-autofill:hover,
+[data-theme="dark"] textarea:-webkit-autofill:focus,
+[data-theme="dark"] select:-webkit-autofill,
+[data-theme="dark"] select:-webkit-autofill:hover,
+[data-theme="dark"] select:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--default-color);
+  -webkit-box-shadow: 0 0 0px 1000px var(--input-bg) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Select dropdown arrow in dark mode */
+[data-theme="dark"] .form-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+/* Checkbox/Radio in dark mode */
+[data-theme="dark"] .form-check-input {
+  background-color: var(--input-bg);
+  border-color: var(--border-color);
+}
+
+/* Switch in dark mode */
+[data-theme="dark"] .form-switch .form-check-input {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%2394a3b8'/%3e%3c/svg%3e");
+}
+
+/* Scrollbar in dark mode */
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-color);
+}
+
+/* HR in dark mode */
+[data-theme="dark"] hr {
+  border-color: var(--border-color);
+}
+
+/* Placeholder text */
+[data-theme="dark"] ::placeholder {
+  color: var(--light-color);
+  opacity: 1;
+}
+
+/* Selection in dark mode */
+[data-theme="dark"] ::selection {
+  background-color: var(--accent-color);
+  color: var(--contrast-color);
+}
+
+/* Disabled elements */
+[data-theme="dark"] .form-control:disabled,
+[data-theme="dark"] .form-select:disabled,
+[data-theme="dark"] .btn:disabled {
+  background-color: var(--background-color);
+  opacity: 0.5;
+}
+
+/* Focus ring in dark mode */
+[data-theme="dark"] :focus-visible {
+  outline-color: var(--accent-color);
+}
+
+/* Tables striped in dark mode */
+[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) > * {
+  background-color: color-mix(in srgb, var(--surface-color), var(--contrast-color) 3%);
+}
+
+/* Card shadow adjustment */
+[data-theme="dark"] .card,
+[data-theme="dark"] .widget {
+  box-shadow: var(--card-shadow);
+}
+
+/* Modal backdrop in dark mode */
+[data-theme="dark"] .modal-backdrop {
+  background-color: rgb(0 0 0 / 0.72);
+}
+
+/* Dropdown shadows */
+[data-theme="dark"] .dropdown-menu {
+  box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.4);
+}
+
+/* Chart specific dark mode */
+[data-theme="dark"] .apexcharts-tooltip,
+[data-theme="dark"] .apexcharts-xaxistooltip,
+[data-theme="dark"] .apexcharts-yaxistooltip {
+  background: var(--surface-color) !important;
+  border-color: var(--border-color) !important;
+  color: var(--default-color) !important;
+}
+
+[data-theme="dark"] .apexcharts-tooltip-title {
+  background: var(--background-color) !important;
+  border-color: var(--border-color) !important;
+}
