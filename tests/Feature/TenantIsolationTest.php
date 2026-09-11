@@ -94,8 +94,12 @@ class TenantIsolationTest extends TestCase
         $responseA->assertDontSee('Company B');
         $responseA->assertDontSee('Branch B');
 
-        // Verify branch counts are tenant-specific
-        $this->assertEquals(1, Branch::where('company_id', $companyA->id)->count());
-        $this->assertEquals(1, Branch::where('company_id', $companyB->id)->count());
+        // Verify branch counts are automatically scoped to User A's company (Company A)
+        $this->assertEquals(1, Branch::count());
+        $this->assertEquals('Branch A', Branch::first()->name);
+
+        // Verify that withoutCompany bypass allows platform-level counts
+        $this->assertEquals(1, Branch::withoutCompany()->where('company_id', $companyA->id)->count());
+        $this->assertEquals(1, Branch::withoutCompany()->where('company_id', $companyB->id)->count());
     }
 }

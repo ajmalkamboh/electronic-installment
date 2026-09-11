@@ -46,4 +46,12 @@ trait BelongsToCompany
     {
         return $query->withoutGlobalScope(CompanyScope::class);
     }
+
+    /**
+     * Alias for withoutCompany.
+     */
+    public function scopeWithoutCompanyScope(Builder $query): Builder
+    {
+        return $query->withoutGlobalScope(CompanyScope::class);
+    }
 }

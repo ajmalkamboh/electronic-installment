@@ -66,18 +66,26 @@
       <li class="nav-heading"><span>Administration & Tenancy</span></li>
 
       <li class="nav-item">
-        <a class="nav-link" href="{{ route('dashboard') }}">
-          <i class="bi bi-building"></i>
-          <span>Company & Branches</span>
-          <span class="badge bg-success ms-auto small">Active</span>
+        <a class="nav-link {{ request()->routeIs('branches.*') ? 'active' : '' }}" href="{{ route('branches.index') }}">
+          <i class="bi bi-shop"></i>
+          <span>Branch Showrooms</span>
+          <span class="badge bg-success ms-auto small">Phase 03</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="{{ route('dashboard') }}">
+        <a class="nav-link {{ request()->routeIs('company.settings.*') ? 'active' : '' }}" href="{{ route('company.settings.edit') }}">
+          <i class="bi bi-building-gear"></i>
+          <span>Company Profile</span>
+          <span class="badge bg-success ms-auto small">Phase 03</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link text-muted" href="#" onclick="alert('Phase 04: Users, Roles, Permissions & Employee Structure will be implemented in Phase 04.')">
           <i class="bi bi-shield-check"></i>
           <span>Security & Roles</span>
-          <span class="badge bg-success ms-auto small">Active</span>
+          <span class="badge bg-secondary ms-auto small">Phase 04</span>
         </a>
       </li>
 

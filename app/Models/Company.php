@@ -23,6 +23,10 @@ class Company extends Model
         'city',
         'address',
         'currency',
+        'logo',
+        'receipt_header',
+        'receipt_footer',
+        'terms_conditions',
         'status',
     ];
 

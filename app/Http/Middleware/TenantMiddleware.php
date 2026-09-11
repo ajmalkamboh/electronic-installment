@@ -48,7 +48,21 @@ class TenantMiddleware
                 ]);
             }
 
-            $this->tenantContext->initializeForUser($user);
+            $this->tenantContext->setCompany($user->company);
+
+            // Determine active branch: check session override for admins
+            $activeBranch = null;
+            if ($user->isCompanyAdmin() && $request->session()->has('active_branch_id')) {
+                $sessionBranchId = $request->session()->get('active_branch_id');
+                $activeBranch = $user->company->branches()->where('id', $sessionBranchId)->where('status', 'active')->first();
+            }
+
+            // Fallback to user's assigned branch or first active branch
+            if (!$activeBranch) {
+                $activeBranch = $user->branch ?? $user->company->branches()->where('status', 'active')->first();
+            }
+
+            $this->tenantContext->setBranch($activeBranch);
         }
 
         return $next($request);

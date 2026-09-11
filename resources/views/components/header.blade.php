@@ -12,13 +12,49 @@
     <button class="sidebar-toggle" type="button" title="Toggle Sidebar">
       <i class="bi bi-list"></i>
     </button>
-    <div class="header-context d-none d-md-flex">
-      <span class="badge bg-primary-subtle text-primary border border-primary-subtle me-1">
+    <div class="header-context d-none d-md-flex align-items-center">
+      <span class="badge bg-primary-subtle text-primary border border-primary-subtle me-2 py-1 px-2 d-none d-lg-inline-flex align-items-center">
         <i class="bi bi-building me-1"></i>{{ $company->name ?? 'Default Company' }}
       </span>
-      <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
-        <i class="bi bi-geo-alt me-1"></i>{{ $branch->name ?? 'All Branches' }}
-      </span>
+
+      <!-- Multi-Branch Context Switcher Dropdown -->
+      @if ($company && $company->branches()->where('status', 'active')->count() > 0)
+        <div class="dropdown">
+          <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center py-1 px-2 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Switch Operating Branch Location">
+            <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+            <span class="fw-semibold text-truncate" style="max-width: 140px;">{{ $branch->name ?? 'Select Branch' }}</span>
+            <span class="badge bg-secondary ms-1 small">{{ $branch->code ?? 'HQ' }}</span>
+          </button>
+          <ul class="dropdown-menu shadow-sm">
+            <li class="dropdown-header">
+              <small class="text-uppercase fw-bold text-muted">Operating Branch Location</small>
+            </li>
+            @foreach ($company->branches()->where('status', 'active')->orderByDesc('is_main')->orderBy('name')->get() as $b)
+              <li>
+                <form method="POST" action="{{ route('tenant.switch-branch') }}">
+                  @csrf
+                  <input type="hidden" name="branch_id" value="{{ $b->id }}">
+                  <button type="submit" class="dropdown-item d-flex justify-content-between align-items-center py-2 {{ ($branch && $branch->id === $b->id) ? 'active' : '' }}">
+                    <span>
+                      <i class="bi {{ $b->is_main ? 'bi-star-fill text-warning' : 'bi-shop' }} me-2"></i>
+                      {{ $b->name }}
+                    </span>
+                    <span class="badge {{ ($branch && $branch->id === $b->id) ? 'bg-light text-primary' : 'bg-light text-dark border' }} ms-2">{{ $b->code }}</span>
+                  </button>
+                </form>
+              </li>
+            @endforeach
+            @if (auth()->user()->isCompanyAdmin())
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item text-primary small" href="{{ route('branches.index') }}">
+                  <i class="bi bi-sliders me-2"></i>Manage All Branches
+                </a>
+              </li>
+            @endif
+          </ul>
+        </div>
+      @endif
     </div>
   </div>
 
