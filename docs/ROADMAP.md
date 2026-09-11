@@ -1,14 +1,12 @@
-# Implementation Roadmap: Electronic Installment SaaS
+# Master 18-Phase Implementation Roadmap: Electronic Installment SaaS
 
-## Roadmap Overview
-
-The Electronic Installment SaaS is implemented sequentially through ten production-grade phases. Each phase is independently verifiable, adheres strictly to the architectural standards established in Phase 01, and avoids unapproved technical detours.
+This document establishes the official 18-phase execution plan for the **Electronic Installment SaaS** platform. Each phase is implemented sequentially, thoroughly verified, committed to version control, and formally reviewed before proceeding to the next.
 
 ---
 
-### Phase 01: Foundation, Repository Setup & Architecture (COMPLETED)
+### Phase 01: Repository + AppDashboard + Architecture (COMPLETED)
 - [x] Inspect local WAMP environment, PHP 8.3+, MySQL 8.4+, and AppDashboard Pro template.
-- [x] Initialize Git repository with main branch and link to GitHub remote origin.
+- [x] Initialize Git repository with `main` branch and link to GitHub remote origin.
 - [x] Initialize clean Laravel 13 framework with Livewire 3 and Bootstrap 5.3.8.
 - [x] Establish MySQL database foundation with InnoDB, UTF-8 MB4, and `Asia/Karachi` timezone.
 - [x] Build multi-tenant architecture (`CompanyScope`, `TenantContext`, `BelongsToCompany` trait).
@@ -16,87 +14,149 @@ The Electronic Installment SaaS is implemented sequentially through ten producti
 - [x] Integrate AppDashboard layout, header context, sidebar navigation, and theme toggle.
 - [x] Implement rate-limited authentication, user status checks, and security middleware.
 - [x] Create authentic dashboard with real zero-state database metrics and no fake data.
-- [x] Produce comprehensive architecture, business domain, ADR, and roadmap documentation.
 
 ---
 
-### Phase 02: Customer Management & Guarantor Verification
-- [ ] Implement Customer model (CNIC, Bio, Photos, Residence type, Utility bill verification).
-- [ ] Implement Guarantor and Personal Reference relationships (minimum 2 guarantors).
-- [ ] Implement Livewire Customer Registration wizard with instant CNIC duplicate check.
-- [ ] Implement Customer Credit Profile and verification workflow (Pending -> Verified -> Blacklisted).
-- [ ] Document verification checklist and automated risk score calculation.
+### Phase 02: Master SRS + Business Rules + Database Architecture (COMPLETED)
+- [x] Author comprehensive Master SRS (`docs/MASTER-SRS.md`) with functional requirements (FR-01 to FR-18) and non-functional requirements.
+- [x] Author formal Business Rules Catalog (`docs/BUSINESS-RULES.md`) covering tenancy, customer eligibility, pricing formulas, payment allocation priority, payment submission vs acknowledgement, late-fee formulas, and recovery escalations.
+- [x] Author Master Database Architecture (`docs/DATABASE-SCHEMA.md`) with complete 34-entity table specifications and Mermaid ERDs.
+- [x] Resolve open business decisions in Decision Register (`docs/DECISION-REGISTER.md`).
+- [x] Align master roadmap with the confirmed 18-phase structure.
 
 ---
 
-### Phase 03: Product Catalog & Serialized Inventory (IMEI / Serial Numbers)
-- [ ] Product Categories (Smartphones, LED TVs, Refrigerators, ACs, Solar, Motorcycles).
-- [ ] Brand and Model master catalog.
-- [ ] Serialized Item Tracking: Mandatory IMEI 1, IMEI 2, or Serial Number capture on stock arrival.
-- [ ] Branch Stock allocation and Showroom inventory status (`in_stock`, `reserved`, `allocated`, `repossessed`).
-- [ ] Stock transfer workflow between branches with dispatch and receipt acknowledgment.
+### Phase 03: SaaS Tenant + Company + Branch Foundation (NEXT PHASE)
+- [ ] Migrate full tenant configuration and company profile settings.
+- [ ] Implement branch management CRUD (Create, Read, Update, Deactivate branch).
+- [ ] Implement multi-branch context switcher in UI header with session persistence.
+- [ ] Build tenant-aware Eloquent model scopes across all foundation models.
+- [ ] Implement tenant onboarding wizard for new company registration.
 
 ---
 
-### Phase 04: Installment Calculation Engine & Agreement Generator
-- [ ] Calculation Engine Service (independent from UI controllers):
-  - Fixed markup amount, flat annual percentage, and customizable down payment %.
-  - Flexible frequencies: Monthly, Bi-weekly, Weekly installment plans.
-- [ ] Agreement Model and Payment Schedule Generator:
-  - Generates exact due dates, schedule breakdown, and contract terms.
-- [ ] Contract Printing: Formatted printable legal installment agreement and affidavit.
-- [ ] Specific Serialized Item (IMEI) allocation to agreement.
+### Phase 04: Users + Roles + Permissions + Employee Structure
+- [ ] Implement comprehensive Role-Based Access Control (RBAC) with granular permissions.
+- [ ] Implement employee management interface (Admin, Manager, Credit Officer, Cashier, Collector, Accountant).
+- [ ] Implement branch staff assignment and transfer capabilities.
+- [ ] Implement employee security controls (password policies, status toggling, audit trails).
 
 ---
 
-### Phase 05: Payment Collection, Cash Drawer & Receipts
-- [ ] Point-of-Sale Installment Collection screen (search customer by CNIC, Mobile, or Agreement #).
-- [ ] Automatic payment allocation engine:
-  1. Late Fees & Penalties.
-  2. Overdue Installments.
-  3. Current Due Installment.
-  4. Advance Installments.
-- [ ] Cash Drawer / Till management (Daily open/close reconciliation per cashier).
-- [ ] Instant Thermal Receipt printing (58mm / 80mm format) and digital receipt token generation.
+### Phase 05: Customer + Guarantor + Reference + Verification
+- [ ] Implement Customer model & migrations (13-digit Pakistani CNIC with duplicate guard).
+- [ ] Implement Guarantor and Personal Reference relationships ($1..N$ guarantors per customer/agreement).
+- [ ] Build reactive Livewire Customer Registration wizard with instant CNIC uniqueness check.
+- [ ] Build Customer Verification dossier recording physical residence visits, utility bills, and neighborhood inquiries.
+- [ ] Implement Customer Document upload manager (CNIC front/back, electricity bills, salary slips).
 
 ---
 
-### Phase 06: Recovery, Late Fees & Defaulter Management
-- [ ] Automated Late Fee Calculation engine triggered via Laravel Scheduler.
-- [ ] Grace period configuration (configurable at company and agreement level).
-- [ ] Supervisor Late Fee Waiver authorization flow with audit trail.
-- [ ] Field Collection Officer mobile interface for recording on-site visits and recovery notes.
-- [ ] Customer Defaulter aging buckets: 1–30 days, 31–60 days, 61–90 days, 90+ days.
+### Phase 06: Credit Assessment + Credit Approval
+- [ ] Implement Customer Credit Profile and dynamic credit scoring engine (0–100 score).
+- [ ] Implement Debt-to-Income (DTI) ratio calculator assessing customer monthly financial capacity.
+- [ ] Build multi-tier Credit Approval workflow (Credit Officer recommendation &rarr; Branch Manager approval).
+- [ ] Implement Blacklist management engine barring delinquent debtors across all branches.
 
 ---
 
-### Phase 07: Financial Ledger & Accounting Audits
-- [ ] Double-entry style internal installment ledger:
-  - Cash Account, Financed Accounts Receivable, Earned Markup, Unearned Markup, Late Fee Income.
-- [ ] Strict Financial Immutability: No hard updates or deletes.
-- [ ] Reversal / Adjustment workflow with required managerial authorization and audit trail.
-- [ ] Daily Collection Summary and Cash-to-Bank deposit reconciliation.
+### Phase 07: Products + Categories + Suppliers + Inventory
+- [ ] Implement Product Category hierarchy and brand catalog.
+- [ ] Implement Product Master with cash retail pricing and minimum down payment percentages.
+- [ ] Implement Supplier management and wholesale purchase intake.
+- [ ] Implement Branch Inventory aggregated quantity tracking.
+- [ ] Implement Serialized Item tracking (mandatory IMEI 1, IMEI 2, Serial #, Asset Tag) with state machine (`in_stock` &rarr; `reserved` &rarr; `allocated` &rarr; `disbursed` &rarr; `repossessed`).
+- [ ] Implement inter-branch stock movement and transfer workflow.
 
 ---
 
-### Phase 08: Multi-Branch & Consolidated Reporting
-- [ ] Real-time Branch Comparison Dashboard (Sales volume, Recovery %, Overdue ratio).
-- [ ] Customer Ledger & Statement of Account exportable to PDF and Excel.
-- [ ] Inventory Movement & Aging Report (tracking slow-moving serialized items).
-- [ ] Collection Officer performance & recovery commission calculation.
+### Phase 08: Installment Plans + Pricing / Markup Engine
+- [ ] Build Installment Plan template builder (tenure: 3, 6, 12, 18, 24 months; down payment %; markup rates).
+- [ ] Implement Calculation Engine Service (Fixed markup, Percentage markup, Tiered plan markup).
+- [ ] Build reactive Livewire installment quote calculator with real-time slider controls.
+- [ ] Implement Three-Stage Pricing Audit Trail (Standard &rarr; Negotiated &rarr; Approved with mandatory justification text).
 
 ---
 
-### Phase 09: WhatsApp, SMS & Notification Engine
-- [ ] Integration with Pakistani SMS Gateways (e.g. Branded SMS) and WhatsApp Business API.
-- [ ] Scheduled payment reminders (3 days before due date, on due date).
-- [ ] Instant SMS / WhatsApp receipt upon payment acknowledgment.
-- [ ] Automated overdue alerts with branch contact information.
+### Phase 09: Installment Agreement / Contract
+- [ ] Implement core `InstallmentAgreement` entity and lifecycle state machine (`draft` &rarr; `approved` &rarr; `disbursed` &rarr; `active` &rarr; `completed` &rarr; `defaulted`).
+- [ ] Implement multi-agreement support per customer.
+- [ ] Build contract generation wizard binding Customer, Guarantors, Branch, Product, and specific Serialized Item.
+- [ ] Implement mandatory down payment receipt verification lock prior to physical item disbursement.
 
 ---
 
-### Phase 10: SaaS Subscription & Platform Administration
-- [ ] Platform Super Admin command center for managing multiple tenant companies.
-- [ ] Subscription Plans (Starter, Professional, Enterprise) with branch and agreement limits.
-- [ ] Tenant Billing, Trial Periods, and Automated Suspension for non-payment.
-- [ ] Platform Health Monitoring, Queue telemetry, and Database backup automation.
+### Phase 10: Payment Schedule + Payment Engine
+- [ ] Implement Payment Schedule Generator computing exact chronological monthly/weekly due dates.
+- [ ] Implement Priority Payment Allocation Engine (Late fees &rarr; Earliest overdue &rarr; Current due &rarr; Advance).
+- [ ] Implement Partial payment and Advance payment calculations.
+- [ ] Implement Payment Method vs Status separation (`submitted` &rarr; `pending_verification` &rarr; `acknowledged` &rarr; `reversed`).
+- [ ] Implement Cashier Over-the-Counter Payment intake screen.
+
+---
+
+### Phase 11: Collection Officer + Collection Workflow
+- [ ] Build Collection Officer daily operational dashboard (assigned accounts, recovery targets, route clusters).
+- [ ] Build Mobile Field Collection interface (customer visit logging, promise-to-pay date capture, field cash submission).
+- [ ] Implement Dual-Custody drawer reconciliation workflow (provisional receipt &rarr; branch cashier cash handover & acknowledgement).
+
+---
+
+### Phase 12: Late Fee + Grace Period + Recovery
+- [ ] Implement automated Late Fee calculation scheduler running daily via cron.
+- [ ] Implement company-configurable Grace Periods and fee penalty models (fixed, percentage, daily).
+- [ ] Implement Managerial Late-Fee Waiver authorization workflow with audit trail.
+- [ ] Implement Multi-Stage Recovery Escalation engine (Grace &rarr; Tele-call &rarr; Field visit &rarr; Legal notice &rarr; Repossession).
+
+---
+
+### Phase 13: Receipts + Documents + PDF Engine
+- [ ] Implement POS Thermal Receipt generator (58mm / 80mm formats) with QR verification hash.
+- [ ] Implement full-page A4 payment receipt.
+- [ ] Build legal document PDF generator:
+  - Customer Application Dossier
+  - Legal Contract formatted for Pakistani Stamp Paper
+  - Guarantor Undertaking & Affidavit
+  - Product Delivery Handover Note
+  - Customer Statement of Account
+  - No Objection Certificate (NOC) & Debt Clearance Certificate.
+
+---
+
+### Phase 14: Accounting / Financial Ledger
+- [ ] Implement append-only immutable financial ledger (`financial_ledger_entries`).
+- [ ] Implement Reversal / Adjustment workflow with supervisor approval and linked transaction trail.
+- [ ] Implement Daily Cash Drawer (Till) open/close reconciliation per cashier shift.
+- [ ] Implement Cash-to-Bank deposit reconciliation.
+
+---
+
+### Phase 15: Reports + Dashboards
+- [ ] Build executive Branch Comparison Dashboard (Sales volume, Recovery %, Overdue ratios, Stock turnover).
+- [ ] Build Defaulter Aging Analysis report (1–30 days, 31–60 days, 61–90 days, 90+ days).
+- [ ] Build Customer Account Ledger and statement export (PDF/Excel).
+- [ ] Build Collection Officer recovery performance and commission reports.
+
+---
+
+### Phase 16: SMS + Email + WhatsApp + Scheduler
+- [ ] Integrate Pakistani SMS Gateways and WhatsApp Business Cloud API.
+- [ ] Implement scheduled automated payment due reminders (3 days before, on due date).
+- [ ] Implement instant payment receipt dispatch via SMS and WhatsApp.
+- [ ] Implement automated overdue demand notices.
+
+---
+
+### Phase 17: SaaS Subscription + Limits
+- [ ] Implement Platform Super Admin command center.
+- [ ] Implement SaaS Plan tiers (Starter, Growth, Professional, Enterprise) and feature toggles.
+- [ ] Implement Tenant quota enforcement middleware (users, branches, agreements, monthly transactions).
+- [ ] Implement Tenant billing lifecycle, trial management, and automated non-payment suspension.
+
+---
+
+### Phase 18: Security + Audit + Performance + Production
+- [ ] Implement comprehensive polymorphic audit logging across all entities.
+- [ ] Query optimization with composite database indexes and slow-query telemetry.
+- [ ] Automated database backup scheduler.
+- [ ] Final security audit, penetration test hardening, and production deployment guide.
