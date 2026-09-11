@@ -86,5 +86,36 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
 
     // Blacklist Registry (Phase 06)
     Route::post('/customers/{customer}/blacklist', [\App\Http\Controllers\Tenant\BlacklistController::class, 'toggle'])->name('customers.blacklist.toggle');
+
+    // Product Categories (Phase 07)
+    Route::get('/categories', [\App\Http\Controllers\Tenant\ProductCategoryController::class, 'index'])->name('categories.index');
+    Route::post('/categories', [\App\Http\Controllers\Tenant\ProductCategoryController::class, 'store'])->name('categories.store');
+    Route::put('/categories/{category}', [\App\Http\Controllers\Tenant\ProductCategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{category}', [\App\Http\Controllers\Tenant\ProductCategoryController::class, 'destroy'])->name('categories.destroy');
+
+    // Wholesale Suppliers (Phase 07)
+    Route::get('/suppliers', [\App\Http\Controllers\Tenant\SupplierController::class, 'index'])->name('suppliers.index');
+    Route::post('/suppliers', [\App\Http\Controllers\Tenant\SupplierController::class, 'store'])->name('suppliers.store');
+    Route::put('/suppliers/{supplier}', [\App\Http\Controllers\Tenant\SupplierController::class, 'update'])->name('suppliers.update');
+    Route::delete('/suppliers/{supplier}', [\App\Http\Controllers\Tenant\SupplierController::class, 'destroy'])->name('suppliers.destroy');
+
+    // Products Master Catalog (Phase 07)
+    Route::get('/products', [\App\Http\Controllers\Tenant\ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/create', [\App\Http\Controllers\Tenant\ProductController::class, 'create'])->name('products.create');
+    Route::post('/products', [\App\Http\Controllers\Tenant\ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/{product}', [\App\Http\Controllers\Tenant\ProductController::class, 'show'])->name('products.show');
+    Route::get('/products/{product}/edit', [\App\Http\Controllers\Tenant\ProductController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [\App\Http\Controllers\Tenant\ProductController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [\App\Http\Controllers\Tenant\ProductController::class, 'destroy'])->name('products.destroy');
+
+    // Showroom Inventory & Serialized Hardware (Phase 07)
+    Route::get('/inventory', [\App\Http\Controllers\Tenant\InventoryController::class, 'index'])->name('inventory.index');
+    Route::get('/inventory/serialized', [\App\Http\Controllers\Tenant\InventoryController::class, 'serializedIndex'])->name('inventory.serialized');
+    Route::get('/inventory/receipt', [\App\Http\Controllers\Tenant\InventoryController::class, 'createReceipt'])->name('inventory.receipt.create');
+    Route::post('/inventory/receipt', [\App\Http\Controllers\Tenant\InventoryController::class, 'storeReceipt'])->name('inventory.receipt.store');
+    Route::get('/inventory/serialized/{item}/transfer', [\App\Http\Controllers\Tenant\InventoryController::class, 'createTransfer'])->name('inventory.transfer.create');
+    Route::post('/inventory/serialized/{item}/transfer', [\App\Http\Controllers\Tenant\InventoryController::class, 'storeTransfer'])->name('inventory.transfer.store');
+    Route::get('/inventory/movements', [\App\Http\Controllers\Tenant\InventoryController::class, 'movements'])->name('inventory.movements');
 });
+
 

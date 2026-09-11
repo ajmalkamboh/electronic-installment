@@ -57,12 +57,21 @@
       @endif
 
       <li class="nav-item">
-        <a class="nav-link text-muted" href="#" onclick="alert('Phase 07: Products & Inventory will be implemented in Phase 07.')">
+        <a class="nav-link {{ request()->routeIs('products.*') || request()->routeIs('categories.*') || request()->routeIs('suppliers.*') ? 'active' : '' }}" href="{{ route('products.index') }}">
           <i class="bi bi-boxes"></i>
-          <span>Products & Inventory</span>
-          <span class="badge bg-secondary ms-auto small">Phase 07</span>
+          <span>Products & Catalog</span>
+          <span class="badge bg-success ms-auto small">Phase 07</span>
         </a>
       </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('inventory.*') ? 'active' : '' }}" href="{{ route('inventory.index') }}">
+          <i class="bi bi-upc-scan"></i>
+          <span>Inventory & Serialized</span>
+          <span class="badge bg-success ms-auto small">Phase 07</span>
+        </a>
+      </li>
+
 
       <li class="nav-item">
         <a class="nav-link text-muted" href="#" onclick="alert('Phase 09: Installment Agreements & Contracts will be implemented in Phase 09.')">
