@@ -90,10 +90,10 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link text-muted" href="#" onclick="alert('Phase 09: Installment Agreements & Contracts will be implemented in Phase 09.')">
+        <a class="nav-link {{ request()->routeIs('agreements.*') ? 'active' : '' }}" href="{{ route('agreements.index') }}">
           <i class="bi bi-file-earmark-text"></i>
           <span>Installment Contracts</span>
-          <span class="badge bg-secondary ms-auto small">Phase 09</span>
+          <span class="badge bg-success ms-auto small">Phase 09</span>
         </a>
       </li>
 

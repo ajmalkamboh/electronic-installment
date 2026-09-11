@@ -70,9 +70,24 @@ class SerializedItem extends Model
         return $this->hasMany(StockMovement::class);
     }
 
+    public function agreements(): HasMany
+    {
+        return $this->hasMany(InstallmentAgreement::class);
+    }
+
     public function isAvailable(): bool
     {
         return $this->status === 'in_stock';
+    }
+
+    public function isReserved(): bool
+    {
+        return $this->status === 'reserved';
+    }
+
+    public function isDisbursed(): bool
+    {
+        return $this->status === 'disbursed';
     }
 
     public function getIdentifierLabelAttribute(): string

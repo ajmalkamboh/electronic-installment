@@ -129,6 +129,18 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
     // Pricing Calculator & Quotation Simulator (Phase 08)
     Route::get('/pricing/calculator', [\App\Http\Controllers\Tenant\PricingCalculatorController::class, 'index'])->name('pricing.calculator');
     Route::post('/pricing/calculate', [\App\Http\Controllers\Tenant\PricingCalculatorController::class, 'calculate'])->name('pricing.calculate');
+
+    // Installment Agreements & Contracts (Phase 09)
+    Route::get('/agreements', [\App\Http\Controllers\Tenant\InstallmentAgreementController::class, 'index'])->name('agreements.index');
+    Route::get('/agreements/create', [\App\Http\Controllers\Tenant\InstallmentAgreementController::class, 'create'])->name('agreements.create');
+    Route::post('/agreements', [\App\Http\Controllers\Tenant\InstallmentAgreementController::class, 'store'])->name('agreements.store');
+    Route::get('/agreements/{agreement}', [\App\Http\Controllers\Tenant\InstallmentAgreementController::class, 'show'])->name('agreements.show');
+    Route::post('/agreements/{agreement}/submit', [\App\Http\Controllers\Tenant\InstallmentAgreementController::class, 'submit'])->name('agreements.submit');
+    Route::post('/agreements/{agreement}/approve', [\App\Http\Controllers\Tenant\InstallmentAgreementController::class, 'approve'])->name('agreements.approve');
+    Route::post('/agreements/{agreement}/down-payment', [\App\Http\Controllers\Tenant\InstallmentAgreementController::class, 'recordDownPayment'])->name('agreements.down-payment');
+    Route::post('/agreements/{agreement}/disburse', [\App\Http\Controllers\Tenant\InstallmentAgreementController::class, 'disburse'])->name('agreements.disburse');
+    Route::post('/agreements/{agreement}/cancel', [\App\Http\Controllers\Tenant\InstallmentAgreementController::class, 'cancel'])->name('agreements.cancel');
+    Route::get('/agreements/{agreement}/print', [\App\Http\Controllers\Tenant\InstallmentAgreementController::class, 'print'])->name('agreements.print');
 });
 
 

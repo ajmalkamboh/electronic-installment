@@ -94,6 +94,16 @@ class Customer extends Model
         return $this->hasMany(CreditApproval::class)->orderBy('decided_at', 'desc');
     }
 
+    public function agreements(): HasMany
+    {
+        return $this->hasMany(InstallmentAgreement::class)->orderBy('created_at', 'desc');
+    }
+
+    public function activeAgreements(): HasMany
+    {
+        return $this->agreements()->where('status', 'active');
+    }
+
     public function isVerified(): bool
     {
         return $this->status === 'active' || $this->verifications()->where('outcome', 'approved')->exists();

@@ -38,4 +38,9 @@ class BranchInventory extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function recalculateAvailable(): void
+    {
+        $this->quantity_available = max(0, $this->quantity_on_hand - $this->quantity_reserved);
+    }
 }
