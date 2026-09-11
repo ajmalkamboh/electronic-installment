@@ -116,6 +116,20 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
     Route::get('/inventory/serialized/{item}/transfer', [\App\Http\Controllers\Tenant\InventoryController::class, 'createTransfer'])->name('inventory.transfer.create');
     Route::post('/inventory/serialized/{item}/transfer', [\App\Http\Controllers\Tenant\InventoryController::class, 'storeTransfer'])->name('inventory.transfer.store');
     Route::get('/inventory/movements', [\App\Http\Controllers\Tenant\InventoryController::class, 'movements'])->name('inventory.movements');
+
+    // Installment Plans & Pricing Engine (Phase 08)
+    Route::get('/plans', [\App\Http\Controllers\Tenant\InstallmentPlanController::class, 'index'])->name('plans.index');
+    Route::get('/plans/create', [\App\Http\Controllers\Tenant\InstallmentPlanController::class, 'create'])->name('plans.create');
+    Route::post('/plans', [\App\Http\Controllers\Tenant\InstallmentPlanController::class, 'store'])->name('plans.store');
+    Route::get('/plans/{plan}/edit', [\App\Http\Controllers\Tenant\InstallmentPlanController::class, 'edit'])->name('plans.edit');
+    Route::put('/plans/{plan}', [\App\Http\Controllers\Tenant\InstallmentPlanController::class, 'update'])->name('plans.update');
+    Route::post('/plans/{plan}/toggle', [\App\Http\Controllers\Tenant\InstallmentPlanController::class, 'toggle'])->name('plans.toggle');
+    Route::delete('/plans/{plan}', [\App\Http\Controllers\Tenant\InstallmentPlanController::class, 'destroy'])->name('plans.destroy');
+
+    // Pricing Calculator & Quotation Simulator (Phase 08)
+    Route::get('/pricing/calculator', [\App\Http\Controllers\Tenant\PricingCalculatorController::class, 'index'])->name('pricing.calculator');
+    Route::post('/pricing/calculate', [\App\Http\Controllers\Tenant\PricingCalculatorController::class, 'calculate'])->name('pricing.calculate');
 });
+
 
 

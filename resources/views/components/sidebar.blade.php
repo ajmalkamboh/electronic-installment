@@ -74,12 +74,29 @@
 
 
       <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('pricing.*') ? 'active' : '' }}" href="{{ route('pricing.calculator') }}">
+          <i class="bi bi-calculator"></i>
+          <span>Pricing Calculator</span>
+          <span class="badge bg-success ms-auto small">Phase 08</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('plans.*') ? 'active' : '' }}" href="{{ route('plans.index') }}">
+          <i class="bi bi-credit-card-2-front"></i>
+          <span>Installment Plans</span>
+          <span class="badge bg-success ms-auto small">Phase 08</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link text-muted" href="#" onclick="alert('Phase 09: Installment Agreements & Contracts will be implemented in Phase 09.')">
           <i class="bi bi-file-earmark-text"></i>
           <span>Installment Contracts</span>
           <span class="badge bg-secondary ms-auto small">Phase 09</span>
         </a>
       </li>
+
 
 
       <!-- Administration Section -->
