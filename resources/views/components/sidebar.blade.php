@@ -39,28 +39,39 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link text-muted" href="#" onclick="alert('Phase 03: Installment Agreements & Payment Schedules will be implemented in Phase 03.')">
-          <i class="bi bi-file-earmark-text"></i>
-          <span>Installment Agreements</span>
-          <span class="badge bg-secondary ms-auto small">Phase 03</span>
+        <a class="nav-link {{ request()->routeIs('credit.assessments.*') ? 'active' : '' }}" href="{{ route('credit.assessments.index') }}">
+          <i class="bi bi-speedometer2"></i>
+          <span>Credit Underwriting</span>
+          <span class="badge bg-success ms-auto small">Phase 06</span>
         </a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link text-muted" href="#" onclick="alert('Phase 04: Installment Collection & Receipts will be implemented in Phase 04.')">
-          <i class="bi bi-cash-stack"></i>
-          <span>Collections & Receipts</span>
-          <span class="badge bg-secondary ms-auto small">Phase 04</span>
-        </a>
-      </li>
+      @if(auth()->user()?->can('credit.approve'))
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('credit.approvals.*') ? 'active' : '' }}" href="{{ route('credit.approvals.index') }}">
+            <i class="bi bi-patch-check"></i>
+            <span>Approval Queue</span>
+            <span class="badge bg-warning text-dark ms-auto small">Sign-off</span>
+          </a>
+        </li>
+      @endif
 
       <li class="nav-item">
-        <a class="nav-link text-muted" href="#" onclick="alert('Phase 05: Inventory & Serialized Items (IMEI/Serial) will be implemented in Phase 05.')">
+        <a class="nav-link text-muted" href="#" onclick="alert('Phase 07: Products & Inventory will be implemented in Phase 07.')">
           <i class="bi bi-boxes"></i>
-          <span>Inventory & Serialized</span>
-          <span class="badge bg-secondary ms-auto small">Phase 05</span>
+          <span>Products & Inventory</span>
+          <span class="badge bg-secondary ms-auto small">Phase 07</span>
         </a>
       </li>
+
+      <li class="nav-item">
+        <a class="nav-link text-muted" href="#" onclick="alert('Phase 09: Installment Agreements & Contracts will be implemented in Phase 09.')">
+          <i class="bi bi-file-earmark-text"></i>
+          <span>Installment Contracts</span>
+          <span class="badge bg-secondary ms-auto small">Phase 09</span>
+        </a>
+      </li>
+
 
       <!-- Administration Section -->
       <li class="nav-heading"><span>Administration & Tenancy</span></li>

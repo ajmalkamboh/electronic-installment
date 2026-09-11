@@ -79,6 +79,21 @@ class Customer extends Model
         return $this->hasMany(CustomerVerification::class)->orderBy('verified_at', 'desc');
     }
 
+    public function creditAssessments(): HasMany
+    {
+        return $this->hasMany(CreditAssessment::class)->orderBy('assessed_at', 'desc');
+    }
+
+    public function latestCreditAssessment(): HasOne
+    {
+        return $this->hasOne(CreditAssessment::class)->latestOfMany('assessed_at');
+    }
+
+    public function creditApprovals(): HasMany
+    {
+        return $this->hasMany(CreditApproval::class)->orderBy('decided_at', 'desc');
+    }
+
     public function isVerified(): bool
     {
         return $this->status === 'active' || $this->verifications()->where('outcome', 'approved')->exists();
@@ -87,6 +102,12 @@ class Customer extends Model
     public function isBlacklisted(): bool
     {
         return $this->status === 'blacklisted';
+    }
+
+    public function isCreditApproved(): bool
+    {
+        return $this->latestCreditAssessment?->status === 'approved'
+            || $this->creditApprovals()->whereIn('decision', ['approved', 'conditional'])->exists();
     }
 
     public function getCreditScoreAttribute(): int
@@ -99,3 +120,4 @@ class Customer extends Model
         return (float) ($this->creditProfile?->max_authorized_credit ?? 150000.00);
     }
 }
+

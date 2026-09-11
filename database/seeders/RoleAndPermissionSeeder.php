@@ -103,8 +103,9 @@ class RoleAndPermissionSeeder extends Seeder
             'branches.view',
             'staff.view',
             'customers.view', 'customers.create', 'customers.edit', 'customers.verify',
-            'credit.assess', 'credit.approve',
+            'credit.assess', 'credit.approve', 'credit.blacklist',
             'inventory.view', 'inventory.manage', 'inventory.dispatch',
+
             'agreements.view', 'agreements.create', 'agreements.approve',
             'payments.view', 'payments.collect', 'payments.verify', 'payments.waive_late_fee',
             'recovery.view', 'recovery.visit',

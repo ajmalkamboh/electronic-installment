@@ -73,4 +73,18 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
 
     // Field Verifications
     Route::post('/customers/{customer}/verifications', [\App\Http\Controllers\Tenant\CustomerVerificationController::class, 'store'])->name('customers.verifications.store');
+
+    // Credit Underwriting & Assessments (Phase 06)
+    Route::get('/credit/assessments', [\App\Http\Controllers\Tenant\CreditAssessmentController::class, 'index'])->name('credit.assessments.index');
+    Route::get('/customers/{customer}/assessments/create', [\App\Http\Controllers\Tenant\CreditAssessmentController::class, 'create'])->name('customers.assessments.create');
+    Route::post('/customers/{customer}/assessments', [\App\Http\Controllers\Tenant\CreditAssessmentController::class, 'store'])->name('customers.assessments.store');
+    Route::get('/credit/assessments/{creditAssessment}', [\App\Http\Controllers\Tenant\CreditAssessmentController::class, 'show'])->name('credit.assessments.show');
+
+    // Credit Approvals (Phase 06)
+    Route::get('/credit/approvals', [\App\Http\Controllers\Tenant\CreditApprovalController::class, 'index'])->name('credit.approvals.index');
+    Route::post('/credit/assessments/{creditAssessment}/approve', [\App\Http\Controllers\Tenant\CreditApprovalController::class, 'store'])->name('credit.assessments.approve');
+
+    // Blacklist Registry (Phase 06)
+    Route::post('/customers/{customer}/blacklist', [\App\Http\Controllers\Tenant\BlacklistController::class, 'toggle'])->name('customers.blacklist.toggle');
 });
+

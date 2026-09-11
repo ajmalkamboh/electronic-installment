@@ -24,7 +24,27 @@
         Debtor Account ID: <code class="text-muted">{{ $customer->ulid }}</code> &bull; Registered {{ $customer->created_at->format('M d, Y') }}
       </p>
     </div>
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-2 flex-wrap">
+      <!-- Credit Assessment Action -->
+      @if(auth()->user()->can('credit.assess') && ! $customer->isBlacklisted())
+        <a href="{{ route('customers.assessments.create', $customer) }}" class="btn btn-outline-success">
+          <i class="bi bi-speedometer2 me-1"></i>Conduct Credit Assessment
+        </a>
+      @endif
+
+      <!-- Blacklist Management Trigger -->
+      @if(auth()->user()->can('credit.blacklist'))
+        @if($customer->isBlacklisted())
+          <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#blacklistModal">
+            <i class="bi bi-shield-check me-1"></i>Restore from Blacklist
+          </button>
+        @else
+          <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#blacklistModal">
+            <i class="bi bi-slash-circle me-1"></i>Blacklist Customer
+          </button>
+        @endif
+      @endif
+
       <!-- Status Management Trigger -->
       <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#statusModal">
         <i class="bi bi-shield-shaded me-1"></i>Update Status
@@ -40,6 +60,7 @@
       </a>
     </div>
   </div>
+
 
   <!-- Credit & Underwriting Overview Cards -->
   <div class="row g-3 mb-4">
@@ -117,7 +138,13 @@
             <i class="bi bi-journal-check me-1"></i>Field Verification Audits ({{ $customer->verifications->count() }})
           </button>
         </li>
+        <li class="nav-item">
+          <button class="nav-link fw-semibold" data-bs-toggle="tab" data-bs-target="#tab-credit" type="button">
+            <i class="bi bi-speedometer2 me-1"></i>Credit Assessments ({{ $customer->creditAssessments->count() }})
+          </button>
+        </li>
       </ul>
+
     </div>
     <div class="card-body p-4">
       <div class="tab-content">
@@ -351,9 +378,105 @@
             @endforelse
           </div>
         </div>
+
+        <!-- Tab 5: Credit Assessments & Approvals -->
+        <div class="tab-pane fade" id="tab-credit">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h6 class="fw-bold text-primary mb-1"><i class="bi bi-speedometer2 me-2"></i>Underwriting History & Credit Approvals</h6>
+              <p class="text-muted small mb-0">Record of quantitative risk scores, DTI calculations, and managerial credit limit sign-offs.</p>
+            </div>
+            @if(auth()->user()->can('credit.assess') && ! $customer->isBlacklisted())
+              <a href="{{ route('customers.assessments.create', $customer) }}" class="btn btn-sm btn-primary">
+                <i class="bi bi-plus-circle me-1"></i>New Credit Assessment
+              </a>
+            @endif
+          </div>
+
+          @forelse($customer->creditAssessments as $assessment)
+            <div class="card border mb-3 {{ $assessment->status === 'approved' ? 'border-success-subtle bg-success-subtle bg-opacity-10' : ($assessment->status === 'rejected' ? 'border-danger-subtle' : '') }}">
+              <div class="card-body p-3">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+                  <div>
+                    <span class="font-monospace fw-semibold text-dark">Assessment #{{ substr($assessment->ulid, -8) }}</span>
+                    <small class="text-muted ms-2">{{ $assessment->assessed_at?->format('d M Y, h:i A') }}</small>
+                    <span class="text-muted small ms-2">by {{ $assessment->assessedBy->name }}</span>
+                  </div>
+                  <div class="d-flex gap-2 align-items-center">
+                    @php
+                      $statusBadges = [
+                        'pending_approval' => 'bg-warning text-dark',
+                        'approved' => 'bg-success',
+                        'rejected' => 'bg-danger',
+                        'superseded' => 'bg-secondary',
+                      ];
+                    @endphp
+                    <span class="badge {{ $statusBadges[$assessment->status] ?? 'bg-secondary' }}">
+                      {{ str_replace('_', ' ', ucfirst($assessment->status)) }}
+                    </span>
+                    <a href="{{ route('credit.assessments.show', $assessment) }}" class="btn btn-sm btn-outline-primary py-0 px-2">
+                      <i class="bi bi-eye me-1"></i>Dossier
+                    </a>
+                  </div>
+                </div>
+
+                <div class="row g-3 small mt-1">
+                  <div class="col-sm-6 col-md-3">
+                    <span class="text-muted d-block">Monthly Obligations</span>
+                    <strong>Rs. {{ number_format($assessment->proposed_installment_limit) }}</strong>
+                    <span class="text-muted">/ {{ number_format($assessment->monthly_income) }}</span>
+                  </div>
+                  <div class="col-sm-6 col-md-3">
+                    <span class="text-muted d-block">DTI Ratio</span>
+                    <strong class="{{ $assessment->calculated_dti_percentage > 40.0 ? 'text-danger' : 'text-success' }}">
+                      {{ $assessment->calculated_dti_percentage }}%
+                    </strong>
+                    @if($assessment->calculated_dti_percentage > 40.0)
+                      <span class="badge bg-danger-subtle text-danger small">Over Cap</span>
+                    @endif
+                  </div>
+                  <div class="col-sm-6 col-md-3">
+                    <span class="text-muted d-block">Score & Risk Tier</span>
+                    <strong>{{ $assessment->score }}/100</strong>
+                    <span class="badge bg-light text-dark border ms-1 text-uppercase">{{ $assessment->risk_tier }}</span>
+                  </div>
+                  <div class="col-sm-6 col-md-3">
+                    <span class="text-muted d-block">Authorized Limit</span>
+                    @if($assessment->latestApproval && $assessment->latestApproval->decision !== 'rejected')
+                      <strong class="text-success">Rs. {{ number_format($assessment->latestApproval->authorized_credit_limit) }}</strong>
+                    @elseif($assessment->status === 'rejected')
+                      <strong class="text-danger">Rs. 0</strong>
+                    @else
+                      <span class="text-muted">Pending Manager Sign-off</span>
+                    @endif
+                  </div>
+                </div>
+
+                @if($assessment->conditions_summary)
+                  <div class="mt-2 pt-2 border-top small text-muted">
+                    <strong>Conditions:</strong> {{ $assessment->conditions_summary }}
+                  </div>
+                @endif
+              </div>
+            </div>
+          @empty
+            <div class="py-4 text-center text-muted border rounded">
+              <i class="bi bi-speedometer2 fs-1 d-block mb-2 text-secondary"></i>
+              No credit assessments recorded for this customer yet.
+              @if(auth()->user()->can('credit.assess') && ! $customer->isBlacklisted())
+                <div class="mt-2">
+                  <a href="{{ route('customers.assessments.create', $customer) }}" class="btn btn-sm btn-primary">
+                    <i class="bi bi-calculator me-1"></i>Conduct First Assessment
+                  </a>
+                </div>
+              @endif
+            </div>
+          @endforelse
+        </div>
       </div>
     </div>
   </div>
+
 
   <!-- Modal: Add Guarantor -->
   <div class="modal fade" id="addGuarantorModal" tabindex="-1" aria-hidden="true">
@@ -508,4 +631,48 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal: Blacklist Management (FR-06.4) -->
+  <div class="modal fade" id="blacklistModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-start">
+        <form action="{{ route('customers.blacklist.toggle', $customer) }}" method="POST">
+          @csrf
+          <div class="modal-header {{ $customer->isBlacklisted() ? 'bg-success text-white' : 'bg-danger text-white' }}">
+            <h5 class="modal-title fw-bold">
+              <i class="bi {{ $customer->isBlacklisted() ? 'bi-shield-check' : 'bi-exclamation-triangle-fill' }} me-2"></i>
+              {{ $customer->isBlacklisted() ? 'Restore Customer from Blacklist' : 'Blacklist Defaulter' }}
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            @if($customer->isBlacklisted())
+              <div class="alert alert-info small mb-3">
+                Restoring this customer will remove them from the institutional blacklist and place them in <strong>Restricted</strong> status for supervisory review.
+              </div>
+              <p class="text-dark mb-0">
+                Are you sure you want to restore <strong>{{ $customer->full_name }}</strong> (CNIC: {{ $customer->cnic }})?
+              </p>
+            @else
+              <div class="alert alert-danger small mb-3">
+                <strong>CRITICAL WARNING:</strong> Blacklisting an applicant immediately revokes all credit limits, rejects pending credit assessments, and prevents drafting any future installment agreements across all showrooms.
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold text-dark">Mandatory Blacklist Reason / Default Reference <span class="text-danger">*</span></label>
+                <textarea name="reason" class="form-control" rows="3" required
+                          placeholder="e.g. Willful default on contract #1084, non-responsive after legal notice issued, recovery absconder..."></textarea>
+              </div>
+            @endif
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn {{ $customer->isBlacklisted() ? 'btn-success' : 'btn-danger' }}">
+              {{ $customer->isBlacklisted() ? 'Confirm Restoration' : 'Confirm Blacklist' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </x-app-layout>
+
