@@ -105,6 +105,14 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('collections.*') ? 'active' : '' }}" href="{{ route('collections.dashboard') }}">
+          <i class="bi bi-geo-alt"></i>
+          <span>Field Recovery & Visits</span>
+          <span class="badge bg-success ms-auto small">Phase 11</span>
+        </a>
+      </li>
+
 
 
       <!-- Administration Section -->

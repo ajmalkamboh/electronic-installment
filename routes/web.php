@@ -148,6 +148,17 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
     Route::post('/payments', [\App\Http\Controllers\Tenant\PaymentController::class, 'store'])->name('payments.store');
     Route::get('/payments/{payment}', [\App\Http\Controllers\Tenant\PaymentController::class, 'show'])->name('payments.show');
     Route::get('/payments/{payment}/print', [\App\Http\Controllers\Tenant\PaymentController::class, 'print'])->name('payments.print');
+
+    // Collection Officer & Recovery Workflow (Phase 11)
+    Route::get('/collections/dashboard', [\App\Http\Controllers\Tenant\CollectionController::class, 'dashboard'])->name('collections.dashboard');
+    Route::get('/collections/run-sheet', [\App\Http\Controllers\Tenant\CollectionController::class, 'runSheet'])->name('collections.run-sheet');
+    Route::get('/collections/run-sheet/print', [\App\Http\Controllers\Tenant\CollectionController::class, 'printRunSheet'])->name('collections.run-sheet.print');
+    Route::get('/collections/assignments', [\App\Http\Controllers\Tenant\CollectionController::class, 'assignments'])->name('collections.assignments');
+    Route::post('/collections/assignments', [\App\Http\Controllers\Tenant\CollectionController::class, 'assign'])->name('collections.assignments.store');
+    Route::post('/collections/logs', [\App\Http\Controllers\Tenant\CollectionController::class, 'logVisit'])->name('collections.logs.store');
+    Route::post('/collections/payments', [\App\Http\Controllers\Tenant\CollectionController::class, 'collectFieldPayment'])->name('collections.payments.store');
+    Route::get('/collections/handovers', [\App\Http\Controllers\Tenant\CollectionController::class, 'handovers'])->name('collections.handovers');
+    Route::post('/collections/handovers/acknowledge', [\App\Http\Controllers\Tenant\CollectionController::class, 'acknowledgeHandover'])->name('collections.handovers.acknowledge');
 });
 
 

@@ -31,7 +31,9 @@ class PaymentEngine
         string $paymentMethod,
         ?string $reference = null,
         ?User $cashier = null,
-        ?string $notes = null
+        ?string $notes = null,
+        string $status = 'acknowledged',
+        ?User $collector = null
     ): Payment {
         if ($amount <= 0) {
             throw new DomainException("Payment amount must be greater than zero.");
@@ -41,7 +43,7 @@ class PaymentEngine
             throw new DomainException("Cannot record payment on an agreement in '{$agreement->status}' status. Only active or overdue contracts can receive payments.");
         }
 
-        return DB::transaction(function () use ($agreement, $amount, $paymentMethod, $reference, $cashier, $notes) {
+        return DB::transaction(function () use ($agreement, $amount, $paymentMethod, $reference, $cashier, $notes, $status, $collector) {
             // Ensure schedules exist; if not, generate them
             if ($agreement->schedules()->count() === 0) {
                 $this->scheduleGenerator->generateSchedule($agreement);
@@ -66,13 +68,14 @@ class PaymentEngine
                 'branch_id' => $agreement->branch_id,
                 'installment_agreement_id' => $agreement->id,
                 'customer_id' => $agreement->customer_id,
-                'cashier_id' => $cashier?->id ?? $agreement->creator_id,
+                'cashier_id' => $cashier?->id ?? ($status === 'acknowledged' ? $agreement->creator_id : null),
+                'collector_id' => $collector?->id,
                 'payment_number' => $paymentNumber,
                 'amount' => $amount,
                 'payment_method' => $paymentMethod,
                 'reference_number' => $reference,
                 'payment_date' => Carbon::today()->toDateString(),
-                'status' => 'acknowledged',
+                'status' => $status,
                 'late_fee_paid' => 0.00,
                 'principal_paid' => 0.00,
                 'markup_paid' => 0.00,
@@ -197,5 +200,50 @@ class PaymentEngine
         }
 
         return $paymentNumber;
+    }
+
+    /**
+     * Record a cash payment collected by a field recovery officer.
+     * Starts in 'submitted' status pending physical drawer handover.
+     */
+    public function recordFieldCollection(
+        InstallmentAgreement $agreement,
+        float $amount,
+        User $collector,
+        ?string $reference = null,
+        ?string $notes = null
+    ): Payment {
+        return $this->recordPayment(
+            agreement: $agreement,
+            amount: $amount,
+            paymentMethod: 'cash',
+            reference: $reference,
+            cashier: null,
+            notes: $notes,
+            status: 'submitted',
+            collector: $collector
+        );
+    }
+
+    /**
+     * Acknowledge and finalize a submitted field collection payment upon physical cash handover to cashier.
+     */
+    public function acknowledgeFieldHandover(Payment $payment, User $cashier, ?string $notes = null): Payment
+    {
+        if ($payment->status !== 'submitted') {
+            throw new DomainException("Payment #{$payment->payment_number} is already in '{$payment->status}' status and cannot be acknowledged.");
+        }
+
+        $payment->cashier_id = $cashier->id;
+        $payment->status = 'acknowledged';
+
+        if ($notes) {
+            $existingNotes = $payment->notes ? "{$payment->notes} | " : "";
+            $payment->notes = $existingNotes . "Handover Note: " . $notes;
+        }
+
+        $payment->save();
+
+        return $payment;
     }
 }

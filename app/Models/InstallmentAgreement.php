@@ -169,6 +169,26 @@ class InstallmentAgreement extends Model
         return $this->hasMany(Payment::class)->latest('payment_date');
     }
 
+    public function collectionAssignments(): HasMany
+    {
+        return $this->hasMany(CollectionAssignment::class)->latest();
+    }
+
+    public function activeAssignment(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(CollectionAssignment::class)->where('status', 'active');
+    }
+
+    public function collectionLogs(): HasMany
+    {
+        return $this->hasMany(CollectionLog::class)->latest('visit_date');
+    }
+
+    public function latestCollectionLog(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(CollectionLog::class)->latestOfMany('visit_date');
+    }
+
     public function nextDueSchedule(): ?InstallmentSchedule
     {
         return $this->schedules()
