@@ -113,6 +113,14 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('recovery.*') ? 'active' : '' }}" href="{{ route('recovery.dashboard') }}">
+          <i class="bi bi-shield-exclamation"></i>
+          <span>Late Fees & Recovery</span>
+          <span class="badge bg-success ms-auto small">Phase 12</span>
+        </a>
+      </li>
+
 
 
       <!-- Administration Section -->

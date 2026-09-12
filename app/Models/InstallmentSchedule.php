@@ -58,6 +58,11 @@ class InstallmentSchedule extends Model
         return $this->hasMany(PaymentAllocation::class);
     }
 
+    public function waivers(): HasMany
+    {
+        return $this->hasMany(LateFeeWaiver::class);
+    }
+
     public function isPaid(): bool
     {
         return $this->status === 'paid';
@@ -68,9 +73,30 @@ class InstallmentSchedule extends Model
         return $this->status === 'partially_paid';
     }
 
-    public function isOverdue(): bool
+    public function isOverdue(?\Carbon\Carbon $asOfDate = null): bool
     {
-        return $this->status === 'overdue' || (! $this->isPaid() && $this->due_date->isPast());
+        $checkDate = $asOfDate ?? now();
+        return $this->status === 'overdue' || (! $this->isPaid() && $this->due_date->lt($checkDate->toDateString()));
+    }
+
+    public function daysOverdue(?\Carbon\Carbon $asOfDate = null): int
+    {
+        if ($this->isPaid()) {
+            return 0;
+        }
+
+        $checkDate = $asOfDate ?? now();
+        if ($this->due_date->gte($checkDate->toDateString())) {
+            return 0;
+        }
+
+        return (int) $this->due_date->diffInDays($checkDate->toDateString());
+    }
+
+    public function isGracePeriodActive(?\Carbon\Carbon $asOfDate = null, int $gracePeriodDays = 5): bool
+    {
+        $days = $this->daysOverdue($asOfDate);
+        return $days > 0 && $days <= $gracePeriodDays;
     }
 
     public function getStatusBadgeAttribute(): string

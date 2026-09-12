@@ -22,6 +22,10 @@ class InstallmentPlan extends Model
         'default_markup_rate_pct',
         'fixed_markup_amount',
         'min_down_payment_pct',
+        'grace_period_days',
+        'late_fee_type',
+        'late_fee_amount',
+        'max_penalty_cap',
         'installment_frequency',
         'description',
         'is_active',
@@ -34,6 +38,9 @@ class InstallmentPlan extends Model
             'default_markup_rate_pct' => 'decimal:2',
             'fixed_markup_amount' => 'decimal:2',
             'min_down_payment_pct' => 'decimal:2',
+            'grace_period_days' => 'integer',
+            'late_fee_amount' => 'decimal:2',
+            'max_penalty_cap' => 'decimal:2',
             'is_active' => 'boolean',
         ];
     }

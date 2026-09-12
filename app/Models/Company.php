@@ -27,8 +27,21 @@ class Company extends Model
         'receipt_header',
         'receipt_footer',
         'terms_conditions',
+        'grace_period_days',
+        'late_fee_type',
+        'late_fee_amount',
+        'max_penalty_cap',
         'status',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'grace_period_days' => 'integer',
+            'late_fee_amount' => 'decimal:2',
+            'max_penalty_cap' => 'decimal:2',
+        ];
+    }
 
     protected static function boot(): void
     {

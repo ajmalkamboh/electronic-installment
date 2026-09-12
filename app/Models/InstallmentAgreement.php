@@ -208,6 +208,53 @@ class InstallmentAgreement extends Model
             ->orderBy('installment_number');
     }
 
+    public function recoveryCases(): HasMany
+    {
+        return $this->hasMany(RecoveryCase::class)->latest();
+    }
+
+    public function activeRecoveryCase(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(RecoveryCase::class)->whereNotIn('status', ['settled', 'closed']);
+    }
+
+    public function recoveryNotices(): HasMany
+    {
+        return $this->hasMany(RecoveryNotice::class)->latest('issued_at');
+    }
+
+    public function lateFeeWaivers(): HasMany
+    {
+        return $this->hasMany(LateFeeWaiver::class)->latest();
+    }
+
+    public function totalAccruedLateFees(): float
+    {
+        return (float) $this->schedules()->sum('late_fee_amount');
+    }
+
+    public function totalWaivedLateFees(): float
+    {
+        return (float) $this->lateFeeWaivers()->sum('waived_amount');
+    }
+
+    public function maxDaysOverdue(?\Carbon\Carbon $asOfDate = null): int
+    {
+        $overdueSchedules = $this->schedules()
+            ->where('status', '!=', 'paid')
+            ->get();
+
+        $max = 0;
+        foreach ($overdueSchedules as $schedule) {
+            $days = $schedule->daysOverdue($asOfDate);
+            if ($days > $max) {
+                $max = $days;
+            }
+        }
+
+        return $max;
+    }
+
     // Status helpers
     public function isDraft(): bool
     {

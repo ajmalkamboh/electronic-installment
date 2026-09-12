@@ -159,6 +159,19 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
     Route::post('/collections/payments', [\App\Http\Controllers\Tenant\CollectionController::class, 'collectFieldPayment'])->name('collections.payments.store');
     Route::get('/collections/handovers', [\App\Http\Controllers\Tenant\CollectionController::class, 'handovers'])->name('collections.handovers');
     Route::post('/collections/handovers/acknowledge', [\App\Http\Controllers\Tenant\CollectionController::class, 'acknowledgeHandover'])->name('collections.handovers.acknowledge');
+
+    // Late Fee & Recovery Workflow (Phase 12)
+    Route::get('/recovery', [\App\Http\Controllers\Tenant\RecoveryController::class, 'dashboard'])->name('recovery.dashboard');
+    Route::post('/recovery/run-assessment', [\App\Http\Controllers\Tenant\RecoveryController::class, 'runAssessment'])->name('recovery.run-assessment');
+    Route::get('/recovery/late-fees', [\App\Http\Controllers\Tenant\RecoveryController::class, 'lateFees'])->name('recovery.late-fees');
+    Route::post('/recovery/late-fees/{schedule}/waive', [\App\Http\Controllers\Tenant\RecoveryController::class, 'waiveLateFee'])->name('recovery.late-fees.waive');
+    Route::get('/recovery/cases', [\App\Http\Controllers\Tenant\RecoveryController::class, 'cases'])->name('recovery.cases.index');
+    Route::get('/recovery/cases/{case}', [\App\Http\Controllers\Tenant\RecoveryController::class, 'showCase'])->name('recovery.cases.show');
+    Route::post('/recovery/cases/{case}/issue-notice', [\App\Http\Controllers\Tenant\RecoveryController::class, 'issueNotice'])->name('recovery.cases.issue-notice');
+    Route::get('/recovery/notices/{notice}/print', [\App\Http\Controllers\Tenant\RecoveryController::class, 'printNotice'])->name('recovery.notices.print');
+    Route::post('/recovery/cases/{case}/authorize-repossession', [\App\Http\Controllers\Tenant\RecoveryController::class, 'authorizeRepossession'])->name('recovery.cases.authorize-repossession');
+    Route::post('/recovery/cases/{case}/execute-repossession', [\App\Http\Controllers\Tenant\RecoveryController::class, 'executeRepossession'])->name('recovery.cases.execute-repossession');
+    Route::post('/recovery/cases/{case}/write-off', [\App\Http\Controllers\Tenant\RecoveryController::class, 'writeOff'])->name('recovery.cases.write-off');
 });
 
 
