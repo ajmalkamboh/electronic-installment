@@ -12,6 +12,9 @@
       </p>
     </div>
     <div class="d-flex gap-2 flex-wrap">
+      <a href="{{ route('documents.agreement', $agreement->id) }}" class="btn btn-outline-primary">
+        <i class="bi bi-file-earmark-text me-1"></i>Documents &amp; Print Suite
+      </a>
       <a href="{{ route('agreements.print', $agreement->id) }}" target="_blank" class="btn btn-outline-secondary">
         <i class="bi bi-printer me-1"></i>Print Contract
       </a>

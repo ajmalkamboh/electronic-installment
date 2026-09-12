@@ -172,6 +172,13 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
     Route::post('/recovery/cases/{case}/authorize-repossession', [\App\Http\Controllers\Tenant\RecoveryController::class, 'authorizeRepossession'])->name('recovery.cases.authorize-repossession');
     Route::post('/recovery/cases/{case}/execute-repossession', [\App\Http\Controllers\Tenant\RecoveryController::class, 'executeRepossession'])->name('recovery.cases.execute-repossession');
     Route::post('/recovery/cases/{case}/write-off', [\App\Http\Controllers\Tenant\RecoveryController::class, 'writeOff'])->name('recovery.cases.write-off');
+
+    // Legal Documents, Print Center & PDF Engine (Phase 13)
+    Route::get('/documents/hub', [\App\Http\Controllers\Tenant\DocumentController::class, 'hub'])->name('documents.hub');
+    Route::get('/documents/agreement/{agreement}', [\App\Http\Controllers\Tenant\DocumentController::class, 'agreementCenter'])->name('documents.agreement');
+    Route::get('/documents/print/{type}/{agreement}', [\App\Http\Controllers\Tenant\DocumentController::class, 'print'])->name('documents.print');
+    Route::get('/documents/receipt/{payment}', [\App\Http\Controllers\Tenant\DocumentController::class, 'printReceipt'])->name('documents.receipt');
+    Route::post('/documents/agreement/{agreement}/noc', [\App\Http\Controllers\Tenant\DocumentController::class, 'issueNoc'])->name('documents.issue-noc');
 });
 
 

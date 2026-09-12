@@ -238,6 +238,11 @@ class InstallmentAgreement extends Model
         return (float) $this->lateFeeWaivers()->sum('waived_amount');
     }
 
+    public function generatedDocuments(): HasMany
+    {
+        return $this->hasMany(GeneratedDocument::class)->latest();
+    }
+
     public function maxDaysOverdue(?\Carbon\Carbon $asOfDate = null): int
     {
         $overdueSchedules = $this->schedules()
@@ -253,6 +258,43 @@ class InstallmentAgreement extends Model
         }
 
         return $max;
+    }
+
+    /**
+     * Calculate early contract settlement with unearned markup discount.
+     */
+    public function calculateEarlySettlement(float $rebatePct = 50.0): array
+    {
+        $unpaidSchedules = $this->schedules()
+            ->where('status', '!=', 'paid')
+            ->get();
+
+        $remainingTotal = (float) $unpaidSchedules->sum('remaining_balance');
+        $unearnedMarkup = (float) $unpaidSchedules->sum('markup_amount');
+        $accruedLateFees = (float) $unpaidSchedules->sum('late_fee_amount');
+
+        $rebateDiscount = round($unearnedMarkup * ($rebatePct / 100.0), 2);
+        $netPayoff = round(max(0.0, ($remainingTotal - $rebateDiscount) + $accruedLateFees), 2);
+        $remainingPrincipal = round(max(0.0, $remainingTotal - $unearnedMarkup), 2);
+        $retainedMarkup = round(max(0.0, $unearnedMarkup - $rebateDiscount), 2);
+
+        return [
+            'remaining_installments' => $unpaidSchedules->count(),
+            'gross_remaining_balance' => $remainingTotal,
+            'contract_balance_before' => $remainingTotal,
+            'remaining_principal' => $remainingPrincipal,
+            'unearned_markup_total' => $unearnedMarkup,
+            'unearned_markup' => $unearnedMarkup,
+            'rebate_percentage' => $rebatePct,
+            'rebate_pct' => $rebatePct,
+            'rebate_discount_amount' => $rebateDiscount,
+            'markup_rebate' => $rebateDiscount,
+            'retained_markup' => $retainedMarkup,
+            'accrued_late_fees' => $accruedLateFees,
+            'net_settlement_payoff' => $netPayoff,
+            'net_settlement_amount' => $netPayoff,
+            'valid_until' => now()->addDays(7)->toDateString(),
+        ];
     }
 
     // Status helpers

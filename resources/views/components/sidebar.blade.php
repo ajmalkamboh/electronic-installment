@@ -121,6 +121,14 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('documents.*') ? 'active' : '' }}" href="{{ route('documents.hub') }}">
+          <i class="bi bi-printer"></i>
+          <span>Documents & Print Hub</span>
+          <span class="badge bg-success ms-auto small">Phase 13</span>
+        </a>
+      </li>
+
 
 
       <!-- Administration Section -->

@@ -79,6 +79,11 @@ class Customer extends Model
         return $this->hasMany(CustomerVerification::class)->orderBy('verified_at', 'desc');
     }
 
+    public function verification(): HasOne
+    {
+        return $this->hasOne(CustomerVerification::class)->latestOfMany();
+    }
+
     public function creditAssessments(): HasMany
     {
         return $this->hasMany(CreditAssessment::class)->orderBy('assessed_at', 'desc');
