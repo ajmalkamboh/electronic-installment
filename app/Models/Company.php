@@ -77,6 +77,21 @@ class Company extends Model
         return $this->hasMany(JournalEntry::class);
     }
 
+    public function notificationSetting(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(NotificationSetting::class);
+    }
+
+    public function notificationTemplates(): HasMany
+    {
+        return $this->hasMany(NotificationTemplate::class);
+    }
+
+    public function notificationLogs(): HasMany
+    {
+        return $this->hasMany(NotificationLog::class);
+    }
+
     public function isActive(): bool
     {
         return $this->status === 'active';

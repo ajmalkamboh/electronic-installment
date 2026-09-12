@@ -180,7 +180,32 @@
         </a>
       </li>
 
+      <!-- Communications & Notifications Section -->
+      <li class="nav-heading"><span>Communications &amp; Alerts</span></li>
 
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('notifications.index*') ? 'active' : '' }}" href="{{ route('notifications.index') }}">
+          <i class="bi bi-chat-left-dots"></i>
+          <span>Notification Outbox</span>
+          <span class="badge bg-success ms-auto small">Phase 15</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('notifications.templates*') ? 'active' : '' }}" href="{{ route('notifications.templates') }}">
+          <i class="bi bi-card-text"></i>
+          <span>Message Templates</span>
+          <span class="badge bg-success ms-auto small">Phase 15</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('notifications.settings*') ? 'active' : '' }}" href="{{ route('notifications.settings') }}">
+          <i class="bi bi-sliders2-vertical"></i>
+          <span>Gateway Settings</span>
+          <span class="badge bg-success ms-auto small">Phase 15</span>
+        </a>
+      </li>
 
       <!-- Administration Section -->
       <li class="nav-heading"><span>Administration & Tenancy</span></li>

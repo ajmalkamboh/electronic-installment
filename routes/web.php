@@ -191,6 +191,15 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
     Route::get('/accounting/balance-sheet', [\App\Http\Controllers\Tenant\AccountingController::class, 'balanceSheet'])->name('accounting.balance-sheet');
     Route::get('/accounting/cash-book', [\App\Http\Controllers\Tenant\AccountingController::class, 'cashBook'])->name('accounting.cash-book');
     Route::get('/accounting/account/{account}/ledger', [\App\Http\Controllers\Tenant\AccountingController::class, 'accountLedger'])->name('accounting.account-ledger');
+
+    // SMS & WhatsApp Notifications Engine (Phase 15)
+    Route::get('/notifications', [\App\Http\Controllers\Tenant\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/send', [\App\Http\Controllers\Tenant\NotificationController::class, 'sendCustom'])->name('notifications.send');
+    Route::post('/notifications/{notification}/retry', [\App\Http\Controllers\Tenant\NotificationController::class, 'retry'])->name('notifications.retry');
+    Route::get('/notifications/templates', [\App\Http\Controllers\Tenant\NotificationController::class, 'templates'])->name('notifications.templates');
+    Route::put('/notifications/templates/{template}', [\App\Http\Controllers\Tenant\NotificationController::class, 'updateTemplate'])->name('notifications.templates.update');
+    Route::get('/notifications/settings', [\App\Http\Controllers\Tenant\NotificationController::class, 'settings'])->name('notifications.settings');
+    Route::post('/notifications/settings', [\App\Http\Controllers\Tenant\NotificationController::class, 'updateSettings'])->name('notifications.settings.update');
 });
 
 
