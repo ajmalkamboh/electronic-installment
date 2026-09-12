@@ -258,6 +258,14 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('tenant.security.audit-logs*') ? 'active' : '' }}" href="{{ route('tenant.security.audit-logs') }}">
+          <i class="bi bi-shield-lock"></i>
+          <span>Security & Audit Trail</span>
+          <span class="badge bg-success ms-auto small">Phase 18</span>
+        </a>
+      </li>
+
       @if(auth()->user()?->isSuperAdmin())
         <li class="nav-heading"><span class="text-danger fw-bold">Platform Super Admin</span></li>
         <li class="nav-item">
@@ -283,6 +291,20 @@
           <a class="nav-link {{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}" href="{{ route('admin.subscriptions.index') }}">
             <i class="bi bi-receipt text-danger"></i>
             <span>Subscriptions Ledger</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('admin.audit-logs.*') ? 'active' : '' }}" href="{{ route('admin.audit-logs.index') }}">
+            <i class="bi bi-journal-text text-danger"></i>
+            <span>Audit Trail Logs</span>
+            <span class="badge bg-danger ms-auto small">Phase 18</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('admin.health.*') ? 'active' : '' }}" href="{{ route('admin.health.index') }}">
+            <i class="bi bi-heart-pulse text-danger"></i>
+            <span>Diagnostics & Health</span>
+            <span class="badge bg-danger ms-auto small">Phase 18</span>
           </a>
         </li>
       @endif

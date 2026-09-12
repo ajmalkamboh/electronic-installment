@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use App\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,7 @@ use Illuminate\Support\Str;
 
 class InventoryTransfer extends Model
 {
-    use HasFactory, SoftDeletes, BelongsToCompany;
+    use Auditable, BelongsToCompany, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'company_id',
@@ -120,7 +121,7 @@ class InventoryTransfer extends Model
 
     public function isGatePassReady(): bool
     {
-        return in_array($this->status, ['dispatched', 'received'], true) && !empty($this->gate_pass_number);
+        return in_array($this->status, ['dispatched', 'received'], true) && ! empty($this->gate_pass_number);
     }
 
     public function getStatusBadgeAttribute(): string
@@ -133,7 +134,7 @@ class InventoryTransfer extends Model
             'received' => '<span class="badge bg-success"><i class="bi bi-check2-circle me-1"></i>Received</span>',
             'rejected' => '<span class="badge bg-danger"><i class="bi bi-x-circle me-1"></i>Rejected</span>',
             'cancelled' => '<span class="badge bg-dark"><i class="bi bi-slash-circle me-1"></i>Cancelled</span>',
-            default => '<span class="badge bg-secondary">' . ucfirst($this->status) . '</span>',
+            default => '<span class="badge bg-secondary">'.ucfirst($this->status).'</span>',
         };
     }
 }

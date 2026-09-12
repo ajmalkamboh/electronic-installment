@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use App\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ use Illuminate\Support\Str;
 
 class Customer extends Model
 {
-    use HasFactory, SoftDeletes, BelongsToCompany;
+    use Auditable, BelongsToCompany, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'company_id',
@@ -135,4 +136,3 @@ class Customer extends Model
         return (float) ($this->creditProfile?->max_authorized_credit ?? 150000.00);
     }
 }
-

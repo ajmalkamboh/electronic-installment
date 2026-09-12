@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use App\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RecoveryCase extends Model
 {
-    use HasFactory, SoftDeletes, BelongsToCompany;
+    use Auditable, BelongsToCompany, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'company_id',
@@ -124,7 +125,7 @@ class RecoveryCase extends Model
             'repossessed' => '<span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i>Repossessed</span>',
             'written_off' => '<span class="badge bg-dark"><i class="bi bi-file-earmark-x me-1"></i>Written Off</span>',
             'resolved' => '<span class="badge bg-success"><i class="bi bi-check2-all me-1"></i>Resolved</span>',
-            default => '<span class="badge bg-light text-dark">' . ucfirst($this->stage) . '</span>',
+            default => '<span class="badge bg-light text-dark">'.ucfirst($this->stage).'</span>',
         };
     }
 
@@ -138,7 +139,7 @@ class RecoveryCase extends Model
             'written_off' => '<span class="badge bg-secondary">Written Off</span>',
             'settled' => '<span class="badge bg-success">Settled</span>',
             'closed' => '<span class="badge bg-light text-dark border">Closed</span>',
-            default => '<span class="badge bg-light text-dark">' . ucfirst($this->status) . '</span>',
+            default => '<span class="badge bg-light text-dark">'.ucfirst($this->status).'</span>',
         };
     }
 }

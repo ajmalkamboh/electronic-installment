@@ -2,18 +2,21 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use App\Traits\BelongsToCompany;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class InstallmentAgreement extends Model
 {
-    use HasFactory, SoftDeletes, BelongsToCompany;
+    use Auditable, BelongsToCompany, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'company_id',
@@ -174,7 +177,7 @@ class InstallmentAgreement extends Model
         return $this->hasMany(CollectionAssignment::class)->latest();
     }
 
-    public function activeAssignment(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function activeAssignment(): HasOne
     {
         return $this->hasOne(CollectionAssignment::class)->where('status', 'active');
     }
@@ -184,7 +187,7 @@ class InstallmentAgreement extends Model
         return $this->hasMany(CollectionLog::class)->latest('visit_date');
     }
 
-    public function latestCollectionLog(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function latestCollectionLog(): HasOne
     {
         return $this->hasOne(CollectionLog::class)->latestOfMany('visit_date');
     }
@@ -213,7 +216,7 @@ class InstallmentAgreement extends Model
         return $this->hasMany(RecoveryCase::class)->latest();
     }
 
-    public function activeRecoveryCase(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function activeRecoveryCase(): HasOne
     {
         return $this->hasOne(RecoveryCase::class)->whereNotIn('status', ['settled', 'closed']);
     }
@@ -243,7 +246,7 @@ class InstallmentAgreement extends Model
         return $this->hasMany(GeneratedDocument::class)->latest();
     }
 
-    public function maxDaysOverdue(?\Carbon\Carbon $asOfDate = null): int
+    public function maxDaysOverdue(?Carbon $asOfDate = null): int
     {
         $overdueSchedules = $this->schedules()
             ->where('status', '!=', 'paid')
@@ -348,7 +351,7 @@ class InstallmentAgreement extends Model
             'completed' => '<span class="badge bg-primary"><i class="bi bi-trophy me-1"></i>Completed</span>',
             'defaulted' => '<span class="badge bg-danger"><i class="bi bi-exclamation-triangle me-1"></i>Defaulted</span>',
             'cancelled' => '<span class="badge bg-dark"><i class="bi bi-x-circle me-1"></i>Cancelled</span>',
-            default => '<span class="badge bg-light text-dark">' . ucfirst($this->status) . '</span>',
+            default => '<span class="badge bg-light text-dark">'.ucfirst($this->status).'</span>',
         };
     }
 }

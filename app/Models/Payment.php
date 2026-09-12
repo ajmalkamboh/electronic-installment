@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use App\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,7 @@ use Illuminate\Support\Str;
 
 class Payment extends Model
 {
-    use HasFactory, SoftDeletes, BelongsToCompany;
+    use Auditable, BelongsToCompany, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'company_id',
@@ -95,7 +96,7 @@ class Payment extends Model
             'easypaisa' => '<span class="badge bg-success text-white"><i class="bi bi-phone me-1"></i>Easypaisa</span>',
             'jazzcash' => '<span class="badge bg-danger text-white"><i class="bi bi-phone me-1"></i>JazzCash</span>',
             'cheque' => '<span class="badge bg-secondary-subtle text-dark border"><i class="bi bi-card-checklist me-1"></i>Cheque</span>',
-            default => '<span class="badge bg-light text-dark">' . ucfirst($this->payment_method) . '</span>',
+            default => '<span class="badge bg-light text-dark">'.ucfirst($this->payment_method).'</span>',
         };
     }
 
@@ -106,7 +107,7 @@ class Payment extends Model
             'submitted' => '<span class="badge bg-warning text-dark"><i class="bi bi-clock me-1"></i>Submitted</span>',
             'reversed' => '<span class="badge bg-danger"><i class="bi bi-arrow-counterclockwise me-1"></i>Reversed</span>',
             'rejected' => '<span class="badge bg-dark"><i class="bi bi-x-circle me-1"></i>Rejected</span>',
-            default => '<span class="badge bg-light text-dark">' . ucfirst($this->status) . '</span>',
+            default => '<span class="badge bg-light text-dark">'.ucfirst($this->status).'</span>',
         };
     }
 }

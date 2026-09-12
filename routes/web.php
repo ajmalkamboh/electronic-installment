@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\Admin\SaaSPlanController;
 use App\Http\Controllers\Admin\SubscriptionBillingController;
+use App\Http\Controllers\Admin\SuperAdminAuditLogController;
 use App\Http\Controllers\Admin\SuperAdminDashboardController;
 use App\Http\Controllers\Admin\TenantManagementController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Tenant\AccountingController;
 use App\Http\Controllers\Tenant\AnalyticsController;
+use App\Http\Controllers\Tenant\AuditLogController;
 use App\Http\Controllers\Tenant\BlacklistController;
 use App\Http\Controllers\Tenant\BranchController;
 use App\Http\Controllers\Tenant\BranchSwitchController;
@@ -251,9 +253,13 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
     Route::post('/transfers/{transfer}/receive', [TransferController::class, 'receiveOrder'])->name('transfers.receive');
     Route::post('/transfers/{transfer}/cancel', [TransferController::class, 'cancel'])->name('transfers.cancel');
     Route::get('/transfers/{transfer}/gate-pass', [TransferController::class, 'gatePass'])->name('transfers.gate-pass');
+
+    // Security & Audit Trail (Phase 18)
+    Route::get('/security/audit-logs', [AuditLogController::class, 'index'])->name('tenant.security.audit-logs');
+    Route::get('/security/audit-logs/{auditLog}', [AuditLogController::class, 'show'])->name('tenant.security.audit-logs.show');
 });
 
-// Platform Super Admin Command Center (Phase 17)
+// Platform Super Admin Command Center (Phase 17 & Phase 18)
 Route::middleware(['auth', 'super_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [SuperAdminDashboardController::class, 'index'])->name('dashboard');
 
@@ -277,4 +283,10 @@ Route::middleware(['auth', 'super_admin'])->prefix('admin')->name('admin.')->gro
     // Subscriptions & Platform Billing
     Route::get('/subscriptions', [SubscriptionBillingController::class, 'index'])->name('subscriptions.index');
     Route::post('/subscriptions/{subscription}/record-payment', [SubscriptionBillingController::class, 'recordPayment'])->name('subscriptions.record-payment');
+
+    // Platform Audit Trail & System Diagnostics (Phase 18)
+    Route::get('/audit-logs', [SuperAdminAuditLogController::class, 'index'])->name('audit-logs.index');
+    Route::get('/audit-logs/{auditLog}', [SuperAdminAuditLogController::class, 'show'])->name('audit-logs.show');
+    Route::get('/health', [SuperAdminAuditLogController::class, 'systemHealth'])->name('health.index');
+    Route::post('/backup/trigger', [SuperAdminAuditLogController::class, 'triggerBackup'])->name('backup.trigger');
 });

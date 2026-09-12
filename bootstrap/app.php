@@ -3,6 +3,7 @@
 use App\Http\Middleware\EnforcePlanLimits;
 use App\Http\Middleware\EnsureFeatureEnabled;
 use App\Http\Middleware\EnsureSuperAdmin;
+use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\TenantMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -16,6 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->append(SecurityHeaders::class);
+
         $middleware->alias([
             'super_admin' => EnsureSuperAdmin::class,
             'plan.limit' => EnforcePlanLimits::class,
