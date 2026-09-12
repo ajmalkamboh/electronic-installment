@@ -129,6 +129,57 @@
         </a>
       </li>
 
+      <!-- Financial Ledger & Accounting Section -->
+      <li class="nav-heading"><span>General Ledger & Accounts</span></li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('accounting.coa*') ? 'active' : '' }}" href="{{ route('accounting.coa') }}">
+          <i class="bi bi-diagram-3"></i>
+          <span>Chart of Accounts</span>
+          <span class="badge bg-success ms-auto small">Phase 14</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('accounting.journal*') ? 'active' : '' }}" href="{{ route('accounting.journal') }}">
+          <i class="bi bi-journal-bookmark"></i>
+          <span>Journal Entries</span>
+          <span class="badge bg-success ms-auto small">Phase 14</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('accounting.trial-balance*') ? 'active' : '' }}" href="{{ route('accounting.trial-balance') }}">
+          <i class="bi bi-calculator"></i>
+          <span>Trial Balance</span>
+          <span class="badge bg-success ms-auto small">Phase 14</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('accounting.profit-loss*') ? 'active' : '' }}" href="{{ route('accounting.profit-loss') }}">
+          <i class="bi bi-graph-up"></i>
+          <span>Profit &amp; Loss</span>
+          <span class="badge bg-success ms-auto small">Phase 14</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('accounting.balance-sheet*') ? 'active' : '' }}" href="{{ route('accounting.balance-sheet') }}">
+          <i class="bi bi-bank"></i>
+          <span>Balance Sheet</span>
+          <span class="badge bg-success ms-auto small">Phase 14</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('accounting.cash-book*') ? 'active' : '' }}" href="{{ route('accounting.cash-book') }}">
+          <i class="bi bi-cash-coin"></i>
+          <span>Showroom Cash Book</span>
+          <span class="badge bg-success ms-auto small">Phase 14</span>
+        </a>
+      </li>
+
 
 
       <!-- Administration Section -->

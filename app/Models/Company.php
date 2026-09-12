@@ -67,6 +67,16 @@ class Company extends Model
         return $this->hasMany(User::class);
     }
 
+    public function accounts(): HasMany
+    {
+        return $this->hasMany(Account::class);
+    }
+
+    public function journalEntries(): HasMany
+    {
+        return $this->hasMany(JournalEntry::class);
+    }
+
     public function isActive(): bool
     {
         return $this->status === 'active';

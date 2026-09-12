@@ -179,6 +179,18 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
     Route::get('/documents/print/{type}/{agreement}', [\App\Http\Controllers\Tenant\DocumentController::class, 'print'])->name('documents.print');
     Route::get('/documents/receipt/{payment}', [\App\Http\Controllers\Tenant\DocumentController::class, 'printReceipt'])->name('documents.receipt');
     Route::post('/documents/agreement/{agreement}/noc', [\App\Http\Controllers\Tenant\DocumentController::class, 'issueNoc'])->name('documents.issue-noc');
+
+    // Financial & General Ledger Engine (Phase 14)
+    Route::get('/accounting/chart-of-accounts', [\App\Http\Controllers\Tenant\AccountingController::class, 'chartOfAccounts'])->name('accounting.coa');
+    Route::post('/accounting/chart-of-accounts', [\App\Http\Controllers\Tenant\AccountingController::class, 'storeAccount'])->name('accounting.accounts.store');
+    Route::get('/accounting/journal', [\App\Http\Controllers\Tenant\AccountingController::class, 'journal'])->name('accounting.journal');
+    Route::get('/accounting/journal/create', [\App\Http\Controllers\Tenant\AccountingController::class, 'createJournal'])->name('accounting.journal.create');
+    Route::post('/accounting/journal', [\App\Http\Controllers\Tenant\AccountingController::class, 'storeJournal'])->name('accounting.journal.store');
+    Route::get('/accounting/trial-balance', [\App\Http\Controllers\Tenant\AccountingController::class, 'trialBalance'])->name('accounting.trial-balance');
+    Route::get('/accounting/profit-loss', [\App\Http\Controllers\Tenant\AccountingController::class, 'profitLoss'])->name('accounting.profit-loss');
+    Route::get('/accounting/balance-sheet', [\App\Http\Controllers\Tenant\AccountingController::class, 'balanceSheet'])->name('accounting.balance-sheet');
+    Route::get('/accounting/cash-book', [\App\Http\Controllers\Tenant\AccountingController::class, 'cashBook'])->name('accounting.cash-book');
+    Route::get('/accounting/account/{account}/ledger', [\App\Http\Controllers\Tenant\AccountingController::class, 'accountLedger'])->name('accounting.account-ledger');
 });
 
 
