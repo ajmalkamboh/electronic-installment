@@ -89,6 +89,13 @@ class User extends Authenticatable
         return $this->status === 'active';
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin'
+            || ($this->roleRecord && $this->roleRecord->name === 'super_admin')
+            || $this->hasRole('super_admin');
+    }
+
     public function isCompanyAdmin(): bool
     {
         return in_array($this->role, ['super_admin', 'company_owner', 'company_admin'], true)
@@ -167,7 +174,7 @@ class User extends Authenticatable
             $model = is_string($role) ? Role::where('name', $role)->first() : $role;
             if ($model) {
                 $roleIds[] = $model->id;
-                if (!$primary) {
+                if (! $primary) {
                     $primary = $model;
                 }
             }

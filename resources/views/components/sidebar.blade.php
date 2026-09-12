@@ -76,7 +76,7 @@
         <a class="nav-link {{ request()->routeIs('transfers.*') ? 'active' : '' }}" href="{{ route('transfers.index') }}">
           <i class="bi bi-truck"></i>
           <span>Stock Transfers &amp; Gate Passes</span>
-          <span class="badge bg-success ms-auto small">Phase 17</span>
+          <span class="badge bg-success ms-auto small">Phase 07</span>
         </a>
       </li>
 
@@ -235,6 +235,14 @@
       </li>
 
       <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('subscription.*') ? 'active' : '' }}" href="{{ route('subscription.index') }}">
+          <i class="bi bi-credit-card-2-front"></i>
+          <span>SaaS &amp; Subscription</span>
+          <span class="badge bg-success ms-auto small">Phase 17</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link {{ request()->routeIs('staff.*') ? 'active' : '' }}" href="{{ route('staff.index') }}">
           <i class="bi bi-people"></i>
           <span>Staff Directory</span>
@@ -249,6 +257,35 @@
           <span class="badge bg-success ms-auto small">Phase 04</span>
         </a>
       </li>
+
+      @if(auth()->user()?->isSuperAdmin())
+        <li class="nav-heading"><span class="text-danger fw-bold">Platform Super Admin</span></li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+            <i class="bi bi-speedometer2 text-danger"></i>
+            <span>Command Center</span>
+            <span class="badge bg-danger ms-auto small">Root</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('admin.companies.*') ? 'active' : '' }}" href="{{ route('admin.companies.index') }}">
+            <i class="bi bi-buildings text-danger"></i>
+            <span>Tenants Directory</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('admin.plans.*') ? 'active' : '' }}" href="{{ route('admin.plans.index') }}">
+            <i class="bi bi-tags text-danger"></i>
+            <span>SaaS Pricing Plans</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}" href="{{ route('admin.subscriptions.index') }}">
+            <i class="bi bi-receipt text-danger"></i>
+            <span>Subscriptions Ledger</span>
+          </a>
+        </li>
+      @endif
 
       <!-- Executive Analytics & Reports Section -->
       <li class="nav-heading"><span>Analytics &amp; Intelligence</span></li>

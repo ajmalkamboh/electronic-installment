@@ -100,5 +100,8 @@ class DatabaseSeeder extends Seeder
 
         // 7. Roles & Permissions & Link Staff
         $this->call(RoleAndPermissionSeeder::class);
+
+        // 8. SaaS Plans, Subscriptions & Platform Super Admin
+        $this->call(SaaSPlanSeeder::class);
     }
 }
