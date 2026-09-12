@@ -72,6 +72,14 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('transfers.*') ? 'active' : '' }}" href="{{ route('transfers.index') }}">
+          <i class="bi bi-truck"></i>
+          <span>Stock Transfers &amp; Gate Passes</span>
+          <span class="badge bg-success ms-auto small">Phase 17</span>
+        </a>
+      </li>
+
 
       <li class="nav-item">
         <a class="nav-link {{ request()->routeIs('pricing.*') ? 'active' : '' }}" href="{{ route('pricing.calculator') }}">

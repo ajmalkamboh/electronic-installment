@@ -28,8 +28,8 @@ return new class extends Migration
             $table->string('asset_tag', 50)->nullable(); // Showroom Barcode Sticker
             $table->string('color', 50)->nullable(); // Variant finish
 
-            // State Machine: in_stock -> reserved -> allocated -> disbursed -> repossessed
-            $table->enum('status', ['in_stock', 'reserved', 'allocated', 'disbursed', 'repossessed'])->default('in_stock');
+            // State Machine: in_stock -> in_transit -> reserved -> allocated -> disbursed -> repossessed
+            $table->enum('status', ['in_stock', 'in_transit', 'reserved', 'allocated', 'disbursed', 'repossessed'])->default('in_stock');
             $table->decimal('purchase_cost', 12, 2)->nullable(); // Wholesale Cost Basis
             $table->dateTime('received_at')->nullable();
             $table->text('notes')->nullable();

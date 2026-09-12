@@ -208,6 +208,17 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
     Route::get('/analytics/branches', [\App\Http\Controllers\Tenant\AnalyticsController::class, 'branches'])->name('analytics.branches');
     Route::get('/analytics/products', [\App\Http\Controllers\Tenant\AnalyticsController::class, 'products'])->name('analytics.products');
     Route::get('/analytics/export/{type}', [\App\Http\Controllers\Tenant\AnalyticsController::class, 'export'])->name('analytics.export');
+
+    // Multi-Branch Inventory Transfers & Gate Passes (Phase 17)
+    Route::get('/transfers', [\App\Http\Controllers\Tenant\TransferController::class, 'index'])->name('transfers.index');
+    Route::get('/transfers/create', [\App\Http\Controllers\Tenant\TransferController::class, 'create'])->name('transfers.create');
+    Route::post('/transfers', [\App\Http\Controllers\Tenant\TransferController::class, 'store'])->name('transfers.store');
+    Route::get('/transfers/{transfer}', [\App\Http\Controllers\Tenant\TransferController::class, 'show'])->name('transfers.show');
+    Route::post('/transfers/{transfer}/approve', [\App\Http\Controllers\Tenant\TransferController::class, 'approve'])->name('transfers.approve');
+    Route::post('/transfers/{transfer}/dispatch', [\App\Http\Controllers\Tenant\TransferController::class, 'dispatchOrder'])->name('transfers.dispatch');
+    Route::post('/transfers/{transfer}/receive', [\App\Http\Controllers\Tenant\TransferController::class, 'receiveOrder'])->name('transfers.receive');
+    Route::post('/transfers/{transfer}/cancel', [\App\Http\Controllers\Tenant\TransferController::class, 'cancel'])->name('transfers.cancel');
+    Route::get('/transfers/{transfer}/gate-pass', [\App\Http\Controllers\Tenant\TransferController::class, 'gatePass'])->name('transfers.gate-pass');
 });
 
 

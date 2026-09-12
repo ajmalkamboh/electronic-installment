@@ -56,6 +56,16 @@ class Branch extends Model
         return $this->hasMany(User::class);
     }
 
+    public function outgoingTransfers(): HasMany
+    {
+        return $this->hasMany(InventoryTransfer::class, 'source_branch_id');
+    }
+
+    public function incomingTransfers(): HasMany
+    {
+        return $this->hasMany(InventoryTransfer::class, 'destination_branch_id');
+    }
+
     public function isActive(): bool
     {
         return $this->status === 'active';

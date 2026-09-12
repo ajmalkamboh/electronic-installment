@@ -90,6 +90,16 @@ class SerializedItem extends Model
         return $this->status === 'disbursed';
     }
 
+    public function isInTransit(): bool
+    {
+        return $this->status === 'in_transit';
+    }
+
+    public function transferItems(): HasMany
+    {
+        return $this->hasMany(InventoryTransferItem::class);
+    }
+
     public function getIdentifierLabelAttribute(): string
     {
         if ($this->imei_1) {
@@ -101,5 +111,18 @@ class SerializedItem extends Model
         }
 
         return "Asset: {$this->asset_tag}";
+    }
+
+    public function getStatusBadgeAttribute(): string
+    {
+        return match ($this->status) {
+            'in_stock' => '<span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>In Stock</span>',
+            'in_transit' => '<span class="badge bg-primary"><i class="bi bi-truck me-1"></i>In Transit</span>',
+            'reserved' => '<span class="badge bg-warning text-dark"><i class="bi bi-bookmark-check me-1"></i>Reserved</span>',
+            'allocated' => '<span class="badge bg-info text-dark"><i class="bi bi-box-seam me-1"></i>Allocated</span>',
+            'disbursed' => '<span class="badge bg-secondary"><i class="bi bi-person-check me-1"></i>Disbursed</span>',
+            'repossessed' => '<span class="badge bg-danger"><i class="bi bi-arrow-return-left me-1"></i>Repossessed</span>',
+            default => '<span class="badge bg-secondary">' . ucfirst($this->status) . '</span>',
+        };
     }
 }

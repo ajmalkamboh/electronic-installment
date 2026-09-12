@@ -92,6 +92,11 @@ class Company extends Model
         return $this->hasMany(NotificationLog::class);
     }
 
+    public function inventoryTransfers(): HasMany
+    {
+        return $this->hasMany(InventoryTransfer::class);
+    }
+
     public function isActive(): bool
     {
         return $this->status === 'active';
