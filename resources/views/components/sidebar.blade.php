@@ -242,11 +242,46 @@
         </a>
       </li>
 
+      <!-- Executive Analytics & Reports Section -->
+      <li class="nav-heading"><span>Analytics &amp; Intelligence</span></li>
+
       <li class="nav-item">
-        <a class="nav-link text-muted" href="#" onclick="alert('Phase 06: Financial Reports, Ledger & Aging will be implemented in Phase 06.')">
-          <i class="bi bi-graph-up-arrow"></i>
-          <span>Reports & Audits</span>
-          <span class="badge bg-secondary ms-auto small">Phase 06</span>
+        <a class="nav-link {{ request()->routeIs('analytics.dashboard*') ? 'active' : '' }}" href="{{ route('analytics.dashboard') }}">
+          <i class="bi bi-speedometer2"></i>
+          <span>Executive Dashboard</span>
+          <span class="badge bg-success ms-auto small">Phase 16</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('analytics.aging*') ? 'active' : '' }}" href="{{ route('analytics.aging') }}">
+          <i class="bi bi-hourglass-split"></i>
+          <span>Portfolio Aging &amp; PAR</span>
+          <span class="badge bg-success ms-auto small">Phase 16</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('analytics.collections*') ? 'active' : '' }}" href="{{ route('analytics.collections') }}">
+          <i class="bi bi-graph-up"></i>
+          <span>Collection Efficiency</span>
+          <span class="badge bg-success ms-auto small">Phase 16</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('analytics.branches*') ? 'active' : '' }}" href="{{ route('analytics.branches') }}">
+          <i class="bi bi-bar-chart-line"></i>
+          <span>Branch Leaderboard</span>
+          <span class="badge bg-success ms-auto small">Phase 16</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('analytics.products*') ? 'active' : '' }}" href="{{ route('analytics.products') }}">
+          <i class="bi bi-pie-chart"></i>
+          <span>Category Profitability</span>
+          <span class="badge bg-success ms-auto small">Phase 16</span>
         </a>
       </li>
     </ul>

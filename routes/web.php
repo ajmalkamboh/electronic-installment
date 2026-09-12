@@ -200,6 +200,14 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
     Route::put('/notifications/templates/{template}', [\App\Http\Controllers\Tenant\NotificationController::class, 'updateTemplate'])->name('notifications.templates.update');
     Route::get('/notifications/settings', [\App\Http\Controllers\Tenant\NotificationController::class, 'settings'])->name('notifications.settings');
     Route::post('/notifications/settings', [\App\Http\Controllers\Tenant\NotificationController::class, 'updateSettings'])->name('notifications.settings.update');
+
+    // Reporting & Analytics Engine (Phase 16)
+    Route::get('/analytics/dashboard', [\App\Http\Controllers\Tenant\AnalyticsController::class, 'dashboard'])->name('analytics.dashboard');
+    Route::get('/analytics/aging', [\App\Http\Controllers\Tenant\AnalyticsController::class, 'aging'])->name('analytics.aging');
+    Route::get('/analytics/collections', [\App\Http\Controllers\Tenant\AnalyticsController::class, 'collections'])->name('analytics.collections');
+    Route::get('/analytics/branches', [\App\Http\Controllers\Tenant\AnalyticsController::class, 'branches'])->name('analytics.branches');
+    Route::get('/analytics/products', [\App\Http\Controllers\Tenant\AnalyticsController::class, 'products'])->name('analytics.products');
+    Route::get('/analytics/export/{type}', [\App\Http\Controllers\Tenant\AnalyticsController::class, 'export'])->name('analytics.export');
 });
 
 
