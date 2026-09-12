@@ -20,337 +20,505 @@
   <!-- Sidebar Navigation -->
   <nav class="sidebar-nav">
     <ul class="nav-menu">
+
+      <!-- Main Overview -->
       <li class="nav-item">
-        <a class="nav-link active" href="{{ route('dashboard') }}">
-          <i class="bi bi-grid"></i>
+        <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
+          <i class="bi bi-grid-1x2-fill"></i>
           <span>Dashboard</span>
         </a>
       </li>
 
-      <!-- Operations Section -->
-      <li class="nav-heading"><span>Business Operations</span></li>
+      <!-- ========================================================= -->
+      <!-- 1. SALES & INSTALLMENT CONTRACTS -->
+      <!-- ========================================================= -->
+      <li class="nav-heading"><span>Sales &amp; Contracts</span></li>
 
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('customers.*') ? 'active' : '' }}" href="{{ route('customers.index') }}">
-          <i class="bi bi-people"></i>
-          <span>Customers & Guarantors</span>
-          <span class="badge bg-success ms-auto small">Phase 05</span>
+      <!-- Customers & Dossiers Submenu -->
+      @php
+        $isCustomersActive = request()->routeIs('customers.*');
+      @endphp
+      <li class="nav-item has-submenu {{ $isCustomersActive ? 'open' : '' }}">
+        <a class="nav-link {{ $isCustomersActive ? 'active' : '' }}" href="#">
+          <i class="bi bi-people-fill"></i>
+          <span>Customers</span>
+          <i class="bi bi-chevron-down nav-arrow"></i>
         </a>
+        <ul class="nav-submenu {{ $isCustomersActive ? 'show' : '' }}">
+          <li>
+            <a class="nav-link {{ request()->routeIs('customers.index') ? 'active' : '' }}" href="{{ route('customers.index') }}">
+              <span>All Customers</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('customers.create') ? 'active' : '' }}" href="{{ route('customers.create') }}">
+              <span>Register Customer</span>
+            </a>
+          </li>
+        </ul>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('credit.assessments.*') ? 'active' : '' }}" href="{{ route('credit.assessments.index') }}">
+      <!-- Credit Underwriting Submenu -->
+      @php
+        $isCreditActive = request()->routeIs('credit.*');
+      @endphp
+      <li class="nav-item has-submenu {{ $isCreditActive ? 'open' : '' }}">
+        <a class="nav-link {{ $isCreditActive ? 'active' : '' }}" href="#">
           <i class="bi bi-speedometer2"></i>
           <span>Credit Underwriting</span>
-          <span class="badge bg-success ms-auto small">Phase 06</span>
+          <i class="bi bi-chevron-down nav-arrow"></i>
         </a>
+        <ul class="nav-submenu {{ $isCreditActive ? 'show' : '' }}">
+          <li>
+            <a class="nav-link {{ request()->routeIs('credit.assessments.*') ? 'active' : '' }}" href="{{ route('credit.assessments.index') }}">
+              <span>Credit Assessments</span>
+            </a>
+          </li>
+          @if(auth()->user()?->can('credit.approve') || auth()->user()?->isCompanyAdmin())
+            <li>
+              <a class="nav-link {{ request()->routeIs('credit.approvals.*') ? 'active' : '' }}" href="{{ route('credit.approvals.index') }}">
+                <span>Approval Queue</span>
+              </a>
+            </li>
+          @endif
+        </ul>
       </li>
 
-      @if(auth()->user()?->can('credit.approve'))
-        <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('credit.approvals.*') ? 'active' : '' }}" href="{{ route('credit.approvals.index') }}">
-            <i class="bi bi-patch-check"></i>
-            <span>Approval Queue</span>
-            <span class="badge bg-warning text-dark ms-auto small">Sign-off</span>
-          </a>
-        </li>
-      @endif
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('products.*') || request()->routeIs('categories.*') || request()->routeIs('suppliers.*') ? 'active' : '' }}" href="{{ route('products.index') }}">
-          <i class="bi bi-boxes"></i>
-          <span>Products & Catalog</span>
-          <span class="badge bg-success ms-auto small">Phase 07</span>
+      <!-- Agreements & Quotations Submenu -->
+      @php
+        $isContractsActive = request()->routeIs('agreements.*') || request()->routeIs('plans.*') || request()->routeIs('pricing.*');
+      @endphp
+      <li class="nav-item has-submenu {{ $isContractsActive ? 'open' : '' }}">
+        <a class="nav-link {{ $isContractsActive ? 'active' : '' }}" href="#">
+          <i class="bi bi-file-earmark-text-fill"></i>
+          <span>Contracts &amp; Plans</span>
+          <i class="bi bi-chevron-down nav-arrow"></i>
         </a>
+        <ul class="nav-submenu {{ $isContractsActive ? 'show' : '' }}">
+          <li>
+            <a class="nav-link {{ request()->routeIs('agreements.index') ? 'active' : '' }}" href="{{ route('agreements.index') }}">
+              <span>Installment Contracts</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('agreements.create') ? 'active' : '' }}" href="{{ route('agreements.create') }}">
+              <span>New Contract</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('plans.*') ? 'active' : '' }}" href="{{ route('plans.index') }}">
+              <span>Installment Plans</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('pricing.*') ? 'active' : '' }}" href="{{ route('pricing.calculator') }}">
+              <span>Pricing Calculator</span>
+            </a>
+          </li>
+        </ul>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('inventory.*') ? 'active' : '' }}" href="{{ route('inventory.index') }}">
-          <i class="bi bi-upc-scan"></i>
-          <span>Inventory & Serialized</span>
-          <span class="badge bg-success ms-auto small">Phase 07</span>
-        </a>
-      </li>
+      <!-- ========================================================= -->
+      <!-- 2. COLLECTIONS & FIELD RECOVERY -->
+      <!-- ========================================================= -->
+      <li class="nav-heading"><span>Collections &amp; Recovery</span></li>
 
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('transfers.*') ? 'active' : '' }}" href="{{ route('transfers.index') }}">
-          <i class="bi bi-truck"></i>
-          <span>Stock Transfers &amp; Gate Passes</span>
-          <span class="badge bg-success ms-auto small">Phase 07</span>
-        </a>
-      </li>
-
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('pricing.*') ? 'active' : '' }}" href="{{ route('pricing.calculator') }}">
-          <i class="bi bi-calculator"></i>
-          <span>Pricing Calculator</span>
-          <span class="badge bg-success ms-auto small">Phase 08</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('plans.*') ? 'active' : '' }}" href="{{ route('plans.index') }}">
-          <i class="bi bi-credit-card-2-front"></i>
-          <span>Installment Plans</span>
-          <span class="badge bg-success ms-auto small">Phase 08</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('agreements.*') ? 'active' : '' }}" href="{{ route('agreements.index') }}">
-          <i class="bi bi-file-earmark-text"></i>
-          <span>Installment Contracts</span>
-          <span class="badge bg-success ms-auto small">Phase 09</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('payments.*') ? 'active' : '' }}" href="{{ route('payments.index') }}">
+      <!-- Payments & Cashier Submenu -->
+      @php
+        $isPaymentsActive = request()->routeIs('payments.*') || request()->routeIs('accounting.cash-book*');
+      @endphp
+      <li class="nav-item has-submenu {{ $isPaymentsActive ? 'open' : '' }}">
+        <a class="nav-link {{ $isPaymentsActive ? 'active' : '' }}" href="#">
           <i class="bi bi-cash-stack"></i>
-          <span>Payments & Receipts</span>
-          <span class="badge bg-success ms-auto small">Phase 10</span>
+          <span>Payments &amp; Till</span>
+          <i class="bi bi-chevron-down nav-arrow"></i>
         </a>
+        <ul class="nav-submenu {{ $isPaymentsActive ? 'show' : '' }}">
+          <li>
+            <a class="nav-link {{ request()->routeIs('payments.index') ? 'active' : '' }}" href="{{ route('payments.index') }}">
+              <span>Payments Ledger</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('payments.create') ? 'active' : '' }}" href="{{ route('payments.create') }}">
+              <span>Receive Payment</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('accounting.cash-book*') ? 'active' : '' }}" href="{{ route('accounting.cash-book') }}">
+              <span>Showroom Cash Book</span>
+            </a>
+          </li>
+        </ul>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('collections.*') ? 'active' : '' }}" href="{{ route('collections.dashboard') }}">
-          <i class="bi bi-geo-alt"></i>
-          <span>Field Recovery & Visits</span>
-          <span class="badge bg-success ms-auto small">Phase 11</span>
+      <!-- Field Collection Submenu -->
+      @php
+        $isCollectionsActive = request()->routeIs('collections.*');
+      @endphp
+      <li class="nav-item has-submenu {{ $isCollectionsActive ? 'open' : '' }}">
+        <a class="nav-link {{ $isCollectionsActive ? 'active' : '' }}" href="#">
+          <i class="bi bi-geo-alt-fill"></i>
+          <span>Field Collection</span>
+          <i class="bi bi-chevron-down nav-arrow"></i>
         </a>
+        <ul class="nav-submenu {{ $isCollectionsActive ? 'show' : '' }}">
+          <li>
+            <a class="nav-link {{ request()->routeIs('collections.dashboard') ? 'active' : '' }}" href="{{ route('collections.dashboard') }}">
+              <span>Field Ops Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('collections.run-sheet*') ? 'active' : '' }}" href="{{ route('collections.run-sheet') }}">
+              <span>Daily Run Sheets</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('collections.handovers*') ? 'active' : '' }}" href="{{ route('collections.handovers') }}">
+              <span>Cash Handovers</span>
+            </a>
+          </li>
+        </ul>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('recovery.*') ? 'active' : '' }}" href="{{ route('recovery.dashboard') }}">
+      <!-- Delinquency & Recovery Submenu -->
+      @php
+        $isRecoveryActive = request()->routeIs('recovery.*');
+      @endphp
+      <li class="nav-item has-submenu {{ $isRecoveryActive ? 'open' : '' }}">
+        <a class="nav-link {{ $isRecoveryActive ? 'active' : '' }}" href="#">
           <i class="bi bi-shield-exclamation"></i>
-          <span>Late Fees & Recovery</span>
-          <span class="badge bg-success ms-auto small">Phase 12</span>
+          <span>Delinquency &amp; Recovery</span>
+          <i class="bi bi-chevron-down nav-arrow"></i>
         </a>
+        <ul class="nav-submenu {{ $isRecoveryActive ? 'show' : '' }}">
+          <li>
+            <a class="nav-link {{ request()->routeIs('recovery.dashboard') ? 'active' : '' }}" href="{{ route('recovery.dashboard') }}">
+              <span>Recovery Command</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('recovery.cases.*') ? 'active' : '' }}" href="{{ route('recovery.cases.index') }}">
+              <span>Recovery Cases</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('recovery.late-fees*') ? 'active' : '' }}" href="{{ route('recovery.late-fees') }}">
+              <span>Late Fees &amp; Waivers</span>
+            </a>
+          </li>
+        </ul>
       </li>
 
+      <!-- ========================================================= -->
+      <!-- 3. INVENTORY & LOGISTICS -->
+      <!-- ========================================================= -->
+      <li class="nav-heading"><span>Catalog &amp; Inventory</span></li>
+
+      <!-- Product Catalog Submenu -->
+      @php
+        $isCatalogActive = request()->routeIs('products.*') || request()->routeIs('categories.*') || request()->routeIs('suppliers.*');
+      @endphp
+      <li class="nav-item has-submenu {{ $isCatalogActive ? 'open' : '' }}">
+        <a class="nav-link {{ $isCatalogActive ? 'active' : '' }}" href="#">
+          <i class="bi bi-boxes"></i>
+          <span>Products &amp; Catalog</span>
+          <i class="bi bi-chevron-down nav-arrow"></i>
+        </a>
+        <ul class="nav-submenu {{ $isCatalogActive ? 'show' : '' }}">
+          <li>
+            <a class="nav-link {{ request()->routeIs('products.index') ? 'active' : '' }}" href="{{ route('products.index') }}">
+              <span>Product Catalog</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('products.create') ? 'active' : '' }}" href="{{ route('products.create') }}">
+              <span>Add New Product</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('categories.*') ? 'active' : '' }}" href="{{ route('categories.index') }}">
+              <span>Categories</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}">
+              <span>Suppliers</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Warehouse & Serialized Stock Submenu -->
+      @php
+        $isInventoryActive = request()->routeIs('inventory.*') || request()->routeIs('transfers.*');
+      @endphp
+      <li class="nav-item has-submenu {{ $isInventoryActive ? 'open' : '' }}">
+        <a class="nav-link {{ $isInventoryActive ? 'active' : '' }}" href="#">
+          <i class="bi bi-upc-scan"></i>
+          <span>Inventory &amp; Transfers</span>
+          <i class="bi bi-chevron-down nav-arrow"></i>
+        </a>
+        <ul class="nav-submenu {{ $isInventoryActive ? 'show' : '' }}">
+          <li>
+            <a class="nav-link {{ request()->routeIs('inventory.index') ? 'active' : '' }}" href="{{ route('inventory.index') }}">
+              <span>Stock Overview</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('inventory.serialized*') ? 'active' : '' }}" href="{{ route('inventory.serialized') }}">
+              <span>Serialized (IMEI / SN)</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('inventory.receipt*') ? 'active' : '' }}" href="{{ route('inventory.receipt.create') }}">
+              <span>Stock Receipt Intake</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('transfers.index') ? 'active' : '' }}" href="{{ route('transfers.index') }}">
+              <span>Stock Transfers</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('transfers.create') ? 'active' : '' }}" href="{{ route('transfers.create') }}">
+              <span>New Transfer / Gate Pass</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- ========================================================= -->
+      <!-- 4. FINANCIAL ACCOUNTING -->
+      <!-- ========================================================= -->
+      <li class="nav-heading"><span>General Ledger &amp; Accounts</span></li>
+
+      @php
+        $isAccountingActive = request()->routeIs('accounting.*') && !request()->routeIs('accounting.cash-book*');
+      @endphp
+      <li class="nav-item has-submenu {{ $isAccountingActive ? 'open' : '' }}">
+        <a class="nav-link {{ $isAccountingActive ? 'active' : '' }}" href="#">
+          <i class="bi bi-journal-bookmark-fill"></i>
+          <span>Financial Accounting</span>
+          <i class="bi bi-chevron-down nav-arrow"></i>
+        </a>
+        <ul class="nav-submenu {{ $isAccountingActive ? 'show' : '' }}">
+          <li>
+            <a class="nav-link {{ request()->routeIs('accounting.coa*') ? 'active' : '' }}" href="{{ route('accounting.coa') }}">
+              <span>Chart of Accounts</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('accounting.journal') ? 'active' : '' }}" href="{{ route('accounting.journal') }}">
+              <span>Journal Entries</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('accounting.journal.create') ? 'active' : '' }}" href="{{ route('accounting.journal.create') }}">
+              <span>New Journal Voucher</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('accounting.trial-balance*') ? 'active' : '' }}" href="{{ route('accounting.trial-balance') }}">
+              <span>Trial Balance</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('accounting.profit-loss*') ? 'active' : '' }}" href="{{ route('accounting.profit-loss') }}">
+              <span>Profit &amp; Loss</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('accounting.balance-sheet*') ? 'active' : '' }}" href="{{ route('accounting.balance-sheet') }}">
+              <span>Balance Sheet</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- ========================================================= -->
+      <!-- 5. BUSINESS INTELLIGENCE & DOCUMENTS -->
+      <!-- ========================================================= -->
+      <li class="nav-heading"><span>Reports &amp; Intelligence</span></li>
+
+      <!-- Executive Analytics Submenu -->
+      @php
+        $isAnalyticsActive = request()->routeIs('analytics.*');
+      @endphp
+      <li class="nav-item has-submenu {{ $isAnalyticsActive ? 'open' : '' }}">
+        <a class="nav-link {{ $isAnalyticsActive ? 'active' : '' }}" href="#">
+          <i class="bi bi-graph-up-arrow"></i>
+          <span>Analytics &amp; Reports</span>
+          <i class="bi bi-chevron-down nav-arrow"></i>
+        </a>
+        <ul class="nav-submenu {{ $isAnalyticsActive ? 'show' : '' }}">
+          <li>
+            <a class="nav-link {{ request()->routeIs('analytics.dashboard*') ? 'active' : '' }}" href="{{ route('analytics.dashboard') }}">
+              <span>Executive Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('analytics.aging*') ? 'active' : '' }}" href="{{ route('analytics.aging') }}">
+              <span>Portfolio Aging &amp; PAR</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('analytics.collections*') ? 'active' : '' }}" href="{{ route('analytics.collections') }}">
+              <span>Collection Efficiency</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('analytics.branches*') ? 'active' : '' }}" href="{{ route('analytics.branches') }}">
+              <span>Branch Leaderboard</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('analytics.products*') ? 'active' : '' }}" href="{{ route('analytics.products') }}">
+              <span>Category Profitability</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Legal Documents Print Hub (Direct) -->
       <li class="nav-item">
         <a class="nav-link {{ request()->routeIs('documents.*') ? 'active' : '' }}" href="{{ route('documents.hub') }}">
-          <i class="bi bi-printer"></i>
-          <span>Documents & Print Hub</span>
-          <span class="badge bg-success ms-auto small">Phase 13</span>
+          <i class="bi bi-printer-fill"></i>
+          <span>Documents &amp; Print Hub</span>
         </a>
       </li>
 
-      <!-- Financial Ledger & Accounting Section -->
-      <li class="nav-heading"><span>General Ledger & Accounts</span></li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('accounting.coa*') ? 'active' : '' }}" href="{{ route('accounting.coa') }}">
-          <i class="bi bi-diagram-3"></i>
-          <span>Chart of Accounts</span>
-          <span class="badge bg-success ms-auto small">Phase 14</span>
+      <!-- Communications & Outbox Submenu -->
+      @php
+        $isCommsActive = request()->routeIs('notifications.*');
+      @endphp
+      <li class="nav-item has-submenu {{ $isCommsActive ? 'open' : '' }}">
+        <a class="nav-link {{ $isCommsActive ? 'active' : '' }}" href="#">
+          <i class="bi bi-chat-left-dots-fill"></i>
+          <span>Communications</span>
+          <i class="bi bi-chevron-down nav-arrow"></i>
         </a>
+        <ul class="nav-submenu {{ $isCommsActive ? 'show' : '' }}">
+          <li>
+            <a class="nav-link {{ request()->routeIs('notifications.index*') ? 'active' : '' }}" href="{{ route('notifications.index') }}">
+              <span>Notification Outbox</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('notifications.templates*') ? 'active' : '' }}" href="{{ route('notifications.templates') }}">
+              <span>Message Templates</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('notifications.settings*') ? 'active' : '' }}" href="{{ route('notifications.settings') }}">
+              <span>Gateway Settings</span>
+            </a>
+          </li>
+        </ul>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('accounting.journal*') ? 'active' : '' }}" href="{{ route('accounting.journal') }}">
-          <i class="bi bi-journal-bookmark"></i>
-          <span>Journal Entries</span>
-          <span class="badge bg-success ms-auto small">Phase 14</span>
+      <!-- ========================================================= -->
+      <!-- 6. ADMINISTRATION & TENANCY -->
+      <!-- ========================================================= -->
+      <li class="nav-heading"><span>Administration</span></li>
+
+      <!-- Settings & Access Submenu -->
+      @php
+        $isAdminActive = request()->routeIs('company.settings.*') || request()->routeIs('branches.*') || request()->routeIs('staff.*') || request()->routeIs('roles.*') || request()->routeIs('tenant.security.audit-logs*');
+      @endphp
+      <li class="nav-item has-submenu {{ $isAdminActive ? 'open' : '' }}">
+        <a class="nav-link {{ $isAdminActive ? 'active' : '' }}" href="#">
+          <i class="bi bi-gear-wide-connected"></i>
+          <span>Company Settings</span>
+          <i class="bi bi-chevron-down nav-arrow"></i>
         </a>
+        <ul class="nav-submenu {{ $isAdminActive ? 'show' : '' }}">
+          <li>
+            <a class="nav-link {{ request()->routeIs('company.settings.*') ? 'active' : '' }}" href="{{ route('company.settings.edit') }}">
+              <span>Company Profile</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('branches.*') ? 'active' : '' }}" href="{{ route('branches.index') }}">
+              <span>Branch Showrooms</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('staff.*') ? 'active' : '' }}" href="{{ route('staff.index') }}">
+              <span>Staff Directory</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}" href="{{ route('roles.index') }}">
+              <span>Roles &amp; Permissions</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link {{ request()->routeIs('tenant.security.audit-logs*') ? 'active' : '' }}" href="{{ route('tenant.security.audit-logs') }}">
+              <span>Security &amp; Audit Trail</span>
+            </a>
+          </li>
+        </ul>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('accounting.trial-balance*') ? 'active' : '' }}" href="{{ route('accounting.trial-balance') }}">
-          <i class="bi bi-calculator"></i>
-          <span>Trial Balance</span>
-          <span class="badge bg-success ms-auto small">Phase 14</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('accounting.profit-loss*') ? 'active' : '' }}" href="{{ route('accounting.profit-loss') }}">
-          <i class="bi bi-graph-up"></i>
-          <span>Profit &amp; Loss</span>
-          <span class="badge bg-success ms-auto small">Phase 14</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('accounting.balance-sheet*') ? 'active' : '' }}" href="{{ route('accounting.balance-sheet') }}">
-          <i class="bi bi-bank"></i>
-          <span>Balance Sheet</span>
-          <span class="badge bg-success ms-auto small">Phase 14</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('accounting.cash-book*') ? 'active' : '' }}" href="{{ route('accounting.cash-book') }}">
-          <i class="bi bi-cash-coin"></i>
-          <span>Showroom Cash Book</span>
-          <span class="badge bg-success ms-auto small">Phase 14</span>
-        </a>
-      </li>
-
-      <!-- Communications & Notifications Section -->
-      <li class="nav-heading"><span>Communications &amp; Alerts</span></li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('notifications.index*') ? 'active' : '' }}" href="{{ route('notifications.index') }}">
-          <i class="bi bi-chat-left-dots"></i>
-          <span>Notification Outbox</span>
-          <span class="badge bg-success ms-auto small">Phase 15</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('notifications.templates*') ? 'active' : '' }}" href="{{ route('notifications.templates') }}">
-          <i class="bi bi-card-text"></i>
-          <span>Message Templates</span>
-          <span class="badge bg-success ms-auto small">Phase 15</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('notifications.settings*') ? 'active' : '' }}" href="{{ route('notifications.settings') }}">
-          <i class="bi bi-sliders2-vertical"></i>
-          <span>Gateway Settings</span>
-          <span class="badge bg-success ms-auto small">Phase 15</span>
-        </a>
-      </li>
-
-      <!-- Administration Section -->
-      <li class="nav-heading"><span>Administration & Tenancy</span></li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('branches.*') ? 'active' : '' }}" href="{{ route('branches.index') }}">
-          <i class="bi bi-shop"></i>
-          <span>Branch Showrooms</span>
-          <span class="badge bg-success ms-auto small">Phase 03</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('company.settings.*') ? 'active' : '' }}" href="{{ route('company.settings.edit') }}">
-          <i class="bi bi-building-gear"></i>
-          <span>Company Profile</span>
-          <span class="badge bg-success ms-auto small">Phase 03</span>
-        </a>
-      </li>
-
+      <!-- SaaS Subscription & Limits (Direct) -->
       <li class="nav-item">
         <a class="nav-link {{ request()->routeIs('subscription.*') ? 'active' : '' }}" href="{{ route('subscription.index') }}">
-          <i class="bi bi-credit-card-2-front"></i>
+          <i class="bi bi-credit-card-2-front-fill"></i>
           <span>SaaS &amp; Subscription</span>
-          <span class="badge bg-success ms-auto small">Phase 17</span>
         </a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('staff.*') ? 'active' : '' }}" href="{{ route('staff.index') }}">
-          <i class="bi bi-people"></i>
-          <span>Staff Directory</span>
-          <span class="badge bg-success ms-auto small">Phase 04</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}" href="{{ route('roles.index') }}">
-          <i class="bi bi-shield-check"></i>
-          <span>Roles & Permissions</span>
-          <span class="badge bg-success ms-auto small">Phase 04</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('tenant.security.audit-logs*') ? 'active' : '' }}" href="{{ route('tenant.security.audit-logs') }}">
-          <i class="bi bi-shield-lock"></i>
-          <span>Security & Audit Trail</span>
-          <span class="badge bg-success ms-auto small">Phase 18</span>
-        </a>
-      </li>
-
+      <!-- ========================================================= -->
+      <!-- 7. PLATFORM SUPER ADMIN (ROOT ONLY) -->
+      <!-- ========================================================= -->
       @if(auth()->user()?->isSuperAdmin())
         <li class="nav-heading"><span class="text-danger fw-bold">Platform Super Admin</span></li>
-        <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
-            <i class="bi bi-speedometer2 text-danger"></i>
-            <span>Command Center</span>
-            <span class="badge bg-danger ms-auto small">Root</span>
+
+        @php
+          $isSuperAdminActive = request()->routeIs('admin.*');
+        @endphp
+        <li class="nav-item has-submenu {{ $isSuperAdminActive ? 'open' : '' }}">
+          <a class="nav-link {{ $isSuperAdminActive ? 'active' : '' }}" href="#">
+            <i class="bi bi-shield-lock-fill text-danger"></i>
+            <span>Platform Root</span>
+            <i class="bi bi-chevron-down nav-arrow"></i>
           </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('admin.companies.*') ? 'active' : '' }}" href="{{ route('admin.companies.index') }}">
-            <i class="bi bi-buildings text-danger"></i>
-            <span>Tenants Directory</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('admin.plans.*') ? 'active' : '' }}" href="{{ route('admin.plans.index') }}">
-            <i class="bi bi-tags text-danger"></i>
-            <span>SaaS Pricing Plans</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}" href="{{ route('admin.subscriptions.index') }}">
-            <i class="bi bi-receipt text-danger"></i>
-            <span>Subscriptions Ledger</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('admin.audit-logs.*') ? 'active' : '' }}" href="{{ route('admin.audit-logs.index') }}">
-            <i class="bi bi-journal-text text-danger"></i>
-            <span>Audit Trail Logs</span>
-            <span class="badge bg-danger ms-auto small">Phase 18</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('admin.health.*') ? 'active' : '' }}" href="{{ route('admin.health.index') }}">
-            <i class="bi bi-heart-pulse text-danger"></i>
-            <span>Diagnostics & Health</span>
-            <span class="badge bg-danger ms-auto small">Phase 18</span>
-          </a>
+          <ul class="nav-submenu {{ $isSuperAdminActive ? 'show' : '' }}">
+            <li>
+              <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+                <span>Command Center</span>
+              </a>
+            </li>
+            <li>
+              <a class="nav-link {{ request()->routeIs('admin.companies.*') ? 'active' : '' }}" href="{{ route('admin.companies.index') }}">
+                <span>Tenants Directory</span>
+              </a>
+            </li>
+            <li>
+              <a class="nav-link {{ request()->routeIs('admin.plans.*') ? 'active' : '' }}" href="{{ route('admin.plans.index') }}">
+                <span>SaaS Pricing Plans</span>
+              </a>
+            </li>
+            <li>
+              <a class="nav-link {{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}" href="{{ route('admin.subscriptions.index') }}">
+                <span>Subscriptions Ledger</span>
+              </a>
+            </li>
+            <li>
+              <a class="nav-link {{ request()->routeIs('admin.audit-logs.*') ? 'active' : '' }}" href="{{ route('admin.audit-logs.index') }}">
+                <span>Audit Trail Logs</span>
+              </a>
+            </li>
+            <li>
+              <a class="nav-link {{ request()->routeIs('admin.health.*') ? 'active' : '' }}" href="{{ route('admin.health.index') }}">
+                <span>Diagnostics &amp; Health</span>
+              </a>
+            </li>
+          </ul>
         </li>
       @endif
 
-      <!-- Executive Analytics & Reports Section -->
-      <li class="nav-heading"><span>Analytics &amp; Intelligence</span></li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('analytics.dashboard*') ? 'active' : '' }}" href="{{ route('analytics.dashboard') }}">
-          <i class="bi bi-speedometer2"></i>
-          <span>Executive Dashboard</span>
-          <span class="badge bg-success ms-auto small">Phase 16</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('analytics.aging*') ? 'active' : '' }}" href="{{ route('analytics.aging') }}">
-          <i class="bi bi-hourglass-split"></i>
-          <span>Portfolio Aging &amp; PAR</span>
-          <span class="badge bg-success ms-auto small">Phase 16</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('analytics.collections*') ? 'active' : '' }}" href="{{ route('analytics.collections') }}">
-          <i class="bi bi-graph-up"></i>
-          <span>Collection Efficiency</span>
-          <span class="badge bg-success ms-auto small">Phase 16</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('analytics.branches*') ? 'active' : '' }}" href="{{ route('analytics.branches') }}">
-          <i class="bi bi-bar-chart-line"></i>
-          <span>Branch Leaderboard</span>
-          <span class="badge bg-success ms-auto small">Phase 16</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('analytics.products*') ? 'active' : '' }}" href="{{ route('analytics.products') }}">
-          <i class="bi bi-pie-chart"></i>
-          <span>Category Profitability</span>
-          <span class="badge bg-success ms-auto small">Phase 16</span>
-        </a>
-      </li>
     </ul>
   </nav>
 </aside>
